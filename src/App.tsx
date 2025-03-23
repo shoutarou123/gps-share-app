@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import "tailwindcss";
 import Home from "./compornents/home";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes, useParams } from "react-router";
 import Login from "./compornents/login";
 import UserRegister from "./compornents/user_register";
 import User from "./compornents/user";
@@ -13,6 +13,7 @@ import Posts from "./compornents/posts";
 import Map from "./compornents/map";
 
 function App() {
+  
 
   return (
     <>
@@ -23,7 +24,7 @@ function App() {
           <Route path="login" element={<Login />} />
 
 
-          <Route path="user" element={<User />} />
+          <Route path="user/:id" element={<User />} />
           <Route path="/user/register" element={<UserRegister />} />
 
 
@@ -34,7 +35,7 @@ function App() {
           <Route path="/post/register" element={<PostRegister />} />
 
           <Route path="posts" element={<Posts />} />
-          
+
           <Route path="map" element={<Map />} />
         </Routes>
       </BrowserRouter>
