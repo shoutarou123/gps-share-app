@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function UserRegister() {
+export default function PersonalRegister() {
   return (
     <>
       <div>user_register</div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-export default function User() {
+export default function Personal() {
   const navigate = useNavigate()
   const { id } = useParams(); // URLのid取得
   
