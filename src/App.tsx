@@ -15,6 +15,9 @@ import PersonalRegister from "./compornents/personalRegister";
 import { atom, useAtom } from "jotai";
 import { SignupForm } from "./compornents/signupForm";
 import LoginForm from "./compornents/LoginForm";
+import { SignOut } from "./compornents/SignOut";
+import { ResetPasswordForm } from "./compornents/ResetPasswordForm";
+import { PasswordReset } from "./compornents/PasswordReset";
 
 const usersAtom = atom<User[]>([]); // user情報を管理するatom
 const loadingAtom = atom(false)
@@ -44,6 +47,12 @@ function App() {
           <Route path="signupform" element={<SignupForm/>}/>
 
           <Route path="login" element={<LoginForm />} />
+
+          <Route path="logout" element={<SignOut />} />
+
+          <Route path="resetPasswordForm" element={<ResetPasswordForm />}/>
+
+          <Route path="passwordReset" element={<PasswordReset />}/>
 
 
           <Route path="personal/:id" element={<Personal />} />

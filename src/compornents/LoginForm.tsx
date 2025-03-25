@@ -10,7 +10,7 @@ type Inputs = {
 
 export default function LoginForm() {
   const navigate = useNavigate();
-  const { handleSubmit, reset } = useForm<Inputs>({ defaultValues: { email: "", password: "" } });
+  const { register, handleSubmit, reset } = useForm<Inputs>({ defaultValues: { email: "", password: "" } });
 
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     try {
@@ -23,15 +23,16 @@ export default function LoginForm() {
         throw new Error(error.message);
       }
       navigate("/"); // 成功したらrootに遷移
+      alert("ログインに成功しました");
     } catch (err) {
-      console.log(err);
+      alert("ログインに失敗しました");
     } finally {
       reset(); // ﾌｫｰﾑ,ﾌｫｰﾑ関連ｴﾗｰ,ﾊﾞﾘﾃﾞｰｼｮﾝもﾘｾｯﾄされる
     }
   }
 
   const handleClick = () => {
-    navigate('/reset_password');
+    navigate('/resetPasswordForm');
   };
 
   return (
@@ -43,6 +44,7 @@ export default function LoginForm() {
           type="email"
           placeholder='メールアドレスを入力してください'
           className='block border border-gray-300'
+          {...register("email")}
         />
 
         <label>パスワード</label>
@@ -50,6 +52,7 @@ export default function LoginForm() {
           type="password"
           placeholder='パスワードを入力してください'
           className='block border border-gray-300'
+          {...register("password")}
         />
 
         <button
