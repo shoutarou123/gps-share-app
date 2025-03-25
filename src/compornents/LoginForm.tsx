@@ -1,0 +1,66 @@
+import React from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router'
+import { supabase } from '../../utils/supabase';
+
+type Inputs = {
+  email: string;
+  password: string;
+}
+
+export default function LoginForm() {
+  const navigate = useNavigate();
+  const { handleSubmit, reset } = useForm<Inputs>({ defaultValues: { email: "", password: "" } });
+
+  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    try {
+      const { email, password } = data;
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      if (error) {
+        throw new Error(error.message);
+      }
+      navigate("/"); // 成功したらrootに遷移
+    } catch (err) {
+      console.log(err);
+    } finally {
+      reset(); // ﾌｫｰﾑ,ﾌｫｰﾑ関連ｴﾗｰ,ﾊﾞﾘﾃﾞｰｼｮﾝもﾘｾｯﾄされる
+    }
+  }
+
+  const handleClick = () => {
+    navigate('/reset_password');
+  };
+
+  return (
+    <div>
+      <h1 className='text-2xl font-bold'>ログインページ</h1>
+      <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
+        <label>メールアドレス</label>
+        <input
+          type="email"
+          placeholder='メールアドレスを入力してください'
+          className='block border border-gray-300'
+        />
+
+        <label>パスワード</label>
+        <input
+          type="password"
+          placeholder='パスワードを入力してください'
+          className='block border border-gray-300'
+        />
+
+        <button
+          type="submit"
+          className='bg-blue-600 text-white hover:bg-blue-700 hover:cursor-pointer'
+        >
+          ログイン
+        </button>
+        <a className='hover:underline cursor-pointer hover:text-blue-600' onClick={handleClick}>パスワードを忘れた</a>
+      </form>
+
+    </div>
+  )
+}

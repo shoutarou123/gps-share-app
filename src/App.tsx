@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "tailwindcss";
 import Home from "./compornents/home";
 import { BrowserRouter, Route, Routes, useParams } from "react-router";
-import Login from "./compornents/login";
 import Team from "./compornents/team";
 import TeamRegister from "./compornents/team_register";
 import Post from "./compornents/post";
@@ -15,6 +14,7 @@ import Personal from "./compornents/personal";
 import PersonalRegister from "./compornents/personalRegister";
 import { atom, useAtom } from "jotai";
 import { SignupForm } from "./compornents/signupForm";
+import LoginForm from "./compornents/LoginForm";
 
 const usersAtom = atom<User[]>([]); // user情報を管理するatom
 const loadingAtom = atom(false)
@@ -43,7 +43,7 @@ function App() {
 
           <Route path="signupform" element={<SignupForm/>}/>
 
-          <Route path="login" element={<Login />} />
+          <Route path="login" element={<LoginForm />} />
 
 
           <Route path="personal/:id" element={<Personal />} />

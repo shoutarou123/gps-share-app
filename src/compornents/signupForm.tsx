@@ -35,11 +35,12 @@ const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
 
 const handleClick = () => {
   navigate("/login");
-}
+};
 
 
   return (
     <div>
+      <h1 className='text-2xl font-bold'>サインアップページ</h1>
       <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
         <label>メールアドレス</label>
         <input
@@ -66,3 +67,6 @@ const handleClick = () => {
     </div>
   )
 }
+
+// handleSubmitはﾌｫｰﾑ送信時の処理を担当し、入力ﾃﾞｰﾀをonSubmit関数に渡す関数。
+// onSubmitはhandleSubmitでﾗｯﾌﾟされた関数で、ﾌｫｰﾑのﾃﾞｰﾀを受け取る。
