@@ -18,6 +18,7 @@ import { SignOut } from "./compornents/SignOut";
 import { ResetPasswordForm } from "./compornents/ResetPasswordForm";
 import { PasswordReset } from "./compornents/PasswordReset";
 import { MapPage } from "./compornents/MapPage";
+import { GeolocationFetch } from "./compornents/GeolocationFetch";
 
 const usersAtom = atom<User[]>([]); // user情報を管理するatom
 const loadingAtom = atom(false)
@@ -68,6 +69,8 @@ function App() {
           <Route path="posts" element={<Posts />} />
 
           <Route path="mapPage" element={<MapPage />} />
+          
+          <Route path="golocationFetch" element={<GeolocationFetch />} />
         </Routes>
       </BrowserRouter>
     )}
