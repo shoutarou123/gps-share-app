@@ -7,7 +7,6 @@ import TeamRegister from "./compornents/team_register";
 import Post from "./compornents/post";
 import PostRegister from "./compornents/post_register";
 import Posts from "./compornents/posts";
-import Map from "./compornents/map";
 import { GetAllUsers } from "../lib/user";
 import { User } from "./domain/user";
 import Personal from "./compornents/personal";
@@ -18,6 +17,7 @@ import LoginForm from "./compornents/LoginForm";
 import { SignOut } from "./compornents/SignOut";
 import { ResetPasswordForm } from "./compornents/ResetPasswordForm";
 import { PasswordReset } from "./compornents/PasswordReset";
+import { MapPage } from "./compornents/MapPage";
 
 const usersAtom = atom<User[]>([]); // user情報を管理するatom
 const loadingAtom = atom(false)
@@ -67,7 +67,7 @@ function App() {
 
           <Route path="posts" element={<Posts />} />
 
-          <Route path="map" element={<Map />} />
+          <Route path="mapPage" element={<MapPage />} />
         </Routes>
       </BrowserRouter>
     )}
