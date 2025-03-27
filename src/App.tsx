@@ -25,21 +25,21 @@ const loadingAtom = atom(false)
 
 function App() {
   const [users, setUsers] = useAtom<User[]>(usersAtom);
-  const [loading, setLoading] = useAtom(loadingAtom);
+  // const [loading, setLoading] = useAtom(loadingAtom);
 
   useEffect(() => {
     const GetAllUser = async () => {
-      setLoading(true);
+      // setLoading(true);
       const usersData = await GetAllUsers();
       setUsers(usersData);
-      setLoading(false);
+      // setLoading(false);
     }
     GetAllUser();
   }, [])
   
   return (
     <>
-    {loading ? (<div><p>Loading...</p></div>) : (
+    {/* {loading ? (<div><p>Loading...</p></div>) : ( */}
       
       <BrowserRouter>
         <Routes>
@@ -69,11 +69,11 @@ function App() {
           <Route path="posts" element={<Posts />} />
 
           <Route path="mapPage" element={<MapPage />} />
-          
+
           <Route path="golocationFetch" element={<GeolocationFetch />} />
         </Routes>
       </BrowserRouter>
-    )}
+    {/* )} */}
     </>
   )
 }

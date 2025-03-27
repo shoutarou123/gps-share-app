@@ -3,11 +3,11 @@ import React from 'react'
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import '../../node_modules/leaflet/dist/leaflet.css'; // 追加
 import { useAtomValue } from 'jotai';
-import { latitudeAtom, loadingAtom } from './Atom';
+import { latitudeAtom, longitudeAtom } from './Atom';
 
 export const MapPage = () => {
   const latitude = useAtomValue(latitudeAtom);
-  const longitude = useAtomValue(loadingAtom);
+  const longitude = useAtomValue(longitudeAtom);
 
   return (
     <>

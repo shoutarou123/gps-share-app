@@ -18,3 +18,11 @@ getValuesによってvalidateを設定するのはリアルタイム監視はで
 画像プロパティの型: string。
 
 この方法は、画像ファイルを効率的に管理し、データベースのサイズを小さく保つために一般的に使用されています。
+
+hook.js:608 Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render. Error Component Stack
+    at GeolocationFetch (GeolocationFetch.tsx:6:20)
+    at App (App.tsx:27:29)
+
+
+
+Geolocation permission has been blocked as the user has dismissed the permission prompt several times. This can be reset in Page Info which can be accessed by clicking the tune icon next to the URL. See https://www.chromestatus.com/feature/6443143280984064 for more information.
