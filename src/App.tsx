@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import "tailwindcss";
-import Home from "./compornents/home";
 import { BrowserRouter, Route, Routes, useParams } from "react-router";
+import { atom, useAtom } from "jotai";
+
+import "tailwindcss";
+
+import { User } from "./domain/user";
+import { GetAllUsers } from "../lib/user";
+
+import Home from "./compornents/home";
 import Team from "./compornents/team";
 import TeamRegister from "./compornents/team_register";
 import Post from "./compornents/post";
-import PostRegister from "./compornents/post_register";
 import Posts from "./compornents/posts";
-import { GetAllUsers } from "../lib/user";
-import { User } from "./domain/user";
 import Personal from "./compornents/personal";
 import PersonalRegister from "./compornents/personalRegister";
-import { atom, useAtom } from "jotai";
 import { SignupForm } from "./compornents/signupForm";
 import LoginForm from "./compornents/LoginForm";
 import { SignOut } from "./compornents/SignOut";
@@ -19,6 +21,7 @@ import { ResetPasswordForm } from "./compornents/ResetPasswordForm";
 import { PasswordReset } from "./compornents/PasswordReset";
 import { MapPage } from "./compornents/MapPage";
 import { GeolocationFetch } from "./compornents/GeolocationFetch";
+import { PostRegister } from "./compornents/post_register";
 
 const usersAtom = atom<User[]>([]); // user情報を管理するatom
 const loadingAtom = atom(false)
