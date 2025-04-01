@@ -1,18 +1,15 @@
 import React, { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react'
 import { useHooks } from '../hooks'
-
-type PostParams = {
-  title: string,
-  content: string,
-  img: string | File | undefined
-}
+import { useAtom } from 'jotai'
+import { postAtom, postContentAtom, postImageAtom, postTitleAtom } from './Atom'
+import { Post } from '../domain/post'
 
 export const PostRegister = () => {
   const { handleFiles, imageContainerRef } = useHooks();
-  const [ title, setTitle] = useState<string>("");
-  const [ content, setContent ] = useState<string>("");
-  const [ img, setImg ] = useState<string | File | undefined>(); 
-  const [ posts, setPosts ] = useState<PostParams[]>([]);
+  const [ title, setTitle] = useAtom<string>(postTitleAtom);
+  const [ content, setContent ] = useAtom<string>(postContentAtom);
+  const [ img, setImg ] = useAtom<string | File | undefined>(postImageAtom); 
+  const [ post, setPost ] = useAtom<Post[]>(postAtom);
   
   // ｱｲﾏｳﾝﾄ時またはimgが変更された場合に実施
   useEffect(() => {
@@ -39,7 +36,7 @@ export const PostRegister = () => {
       img: img
     }
 
-    setPosts((prevPosts) => {
+    setPost((prevPosts) => {
       return [...prevPosts, newPosts]
     
     })
@@ -89,7 +86,7 @@ export const PostRegister = () => {
       {/* 仮投稿一覧 */}
       <h1>投稿一覧</h1>
       <div>
-        {posts.map((post, index) => {
+        {post.map((post, index) => {
           return (
             <div key={index}>
               <label>タイトル</label>

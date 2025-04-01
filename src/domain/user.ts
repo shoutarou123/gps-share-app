@@ -9,7 +9,7 @@ export class User {
     public image?: string | null
   ) {}
 
-  public static newUser(
+  public static newUser (
     id: number,
     name: string,
     unit: string,
