@@ -31,3 +31,13 @@ Geolocation permission has been blocked as the user has dismissed the permission
 useEffect(() => {
   return () => { /* アンマウント時のみ実行 */ };
 }, []);
+
+<!--  
+補足: ファイル名のサニタイズ
+元のファイル名には特殊文字やスペースなどが含まれる場合があります。これらはストレージで問題を引き起こす可能性があります。そのため、サニタイズ（不要な文字列を除去）することも推奨されます。
+
+サニタイズ例
+javascript
+const sanitizedFileName = newImg.name.replace(/[^a-zA-Z0-9.-]/g, '_'); // 特殊文字を除去
+const fileName = `${Date.now()}-${sanitizedFileName}`;
+-->
