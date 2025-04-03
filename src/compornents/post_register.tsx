@@ -4,6 +4,7 @@ import { useAtom } from 'jotai'
 import { postAtom, postContentAtom, postTitleAtom, previewImgAtom, uploadImageAtom } from './Atom'
 import { Post } from '../domain/post'
 import { supabase } from '../../utils/supabase'
+import { useNavigate } from 'react-router'
 
 export const PostRegister = () => {
   const { handleFiles, imageContainerRef } = useHooks();
@@ -13,6 +14,8 @@ export const PostRegister = () => {
   const [uploadImg, setUploadImg] = useAtom<File | null>(uploadImageAtom);
   const [previewImg, setPreviewImg] = useAtom<string | undefined>(previewImgAtom)
   const [post, setPost] = useAtom<Post[]>(postAtom);
+
+  const navigate = useNavigate();
 
   // ｱｲﾏｳﾝﾄ時またはimgが変更された場合に実施
   useEffect(() => {
@@ -140,6 +143,12 @@ export const PostRegister = () => {
           送信
         </button>
       </form>
+        <button
+          className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
+          onClick={() => navigate("/posts")}
+        >
+          投稿一覧へ
+        </button>
     </div>
   )
 }

@@ -3,13 +3,14 @@ import { loadingAtom, postAtom } from './Atom';
 import { Post } from '../domain/post';
 import { supabase } from '../../utils/supabase';
 import { useEffect } from 'react';
-import { ListItem } from '@mui/material';
+import { useNavigate } from 'react-router';
 
 
 
 export const Posts = () => {
   const [post, setPost] = useAtom<Post[]>(postAtom);
   const [loading, setLoading ] = useAtom(loadingAtom)
+  const navigate = useNavigate();
 
   useEffect( () => {
     setLoading(true);
@@ -53,6 +54,10 @@ export const Posts = () => {
         })}
         </tbody>
       </table>
+      <button
+          className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
+          onClick={() => navigate('/post/register')}
+          >投稿登録へ</button>
     </>
   )
 }
