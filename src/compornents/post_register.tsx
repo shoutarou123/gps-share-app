@@ -70,11 +70,13 @@ export const PostRegister = () => {
           image: imageUrl
         }
       ])
+      .select(); // 挿入ﾃﾞｰﾀを取得
+
       if (dataBaseInsertResult.error) throw dataBaseInsertResult.error;
 
       // ローカル状態更新
       setPost((prevPost) => {
-        return [...prevPost, { title: newTitle, content: newContent, img: imageUrl }]
+        return [...prevPost, { id: dataBaseInsertResult.data[0].id, title: newTitle, content: newContent, image: imageUrl }]
       })
 
       // ﾌｧｲﾙ入力ﾘｾｯﾄ
@@ -138,31 +140,6 @@ export const PostRegister = () => {
           送信
         </button>
       </form>
-
-
-
-      {/* 仮投稿一覧 */}
-      <h1>投稿一覧</h1>
-      <div>
-        {post.map((post, index) => {
-          return (
-            <div key={index}>
-              <label>タイトル</label>
-              <p>{post.title}</p>
-              <label>内容</label>
-              <p>{post.content}</p>
-              {post.img && (
-                <img
-                  className='flex'
-                  src={post.img}
-                  style={{ width: 200, height: 200 }}
-                />
-              )}
-            </div>
-          )
-        })}
-      </div>
-
     </div>
   )
 }

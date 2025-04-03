@@ -1,15 +1,17 @@
 export class Post {
   constructor (
+      public id: number,
       public title: string,
       public content: string,
-      public img: string
+      public image: string
   ) {}
 
   public static newPost (
+    id: number,
     title: string,
     content: string,
-    img: string
+    image: string
   ) : Post {
-    return new Post(title, content, img);
+    return new Post(id, title, content, image);
   }
 }

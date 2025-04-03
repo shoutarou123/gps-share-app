@@ -11,7 +11,6 @@ import Home from "./compornents/home";
 import Team from "./compornents/team";
 import TeamRegister from "./compornents/team_register";
 import Post from "./compornents/post";
-import Posts from "./compornents/posts";
 import Personal from "./compornents/personal";
 import PersonalRegister from "./compornents/personalRegister";
 import { SignupForm } from "./compornents/signupForm";
@@ -22,6 +21,7 @@ import { PasswordReset } from "./compornents/PasswordReset";
 import { MapPage } from "./compornents/MapPage";
 import { GeolocationFetch } from "./compornents/GeolocationFetch";
 import { PostRegister } from "./compornents/post_register";
+import { Posts } from "./compornents/posts";
 
 const usersAtom = atom<User[]>([]); // user情報を管理するatom
 const loadingAtom = atom(false)
@@ -39,11 +39,11 @@ function App() {
     }
     GetAllUser();
   }, [])
-  
+
   return (
     <>
     {/* {loading ? (<div><p>Loading...</p></div>) : ( */}
-      
+
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
