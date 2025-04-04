@@ -1,7 +1,7 @@
 import React, { ChangeEvent, ChangeEventHandler, useEffect, useRef, useState } from 'react'
 import { useHooks } from '../hooks'
 import { useAtom } from 'jotai'
-import { postAtom, postContentAtom, postTitleAtom, previewImgAtom, uploadImageAtom } from './Atom'
+import { postAtom, postContentAtom, postTitleAtom, previewImgAtom, previewMovieAtom, uploadImageAtom, uploadMovieAtom } from './Atom'
 import { Post } from '../domain/post'
 import { supabase } from '../../utils/supabase'
 import { useNavigate } from 'react-router'
@@ -10,9 +10,12 @@ export const PostRegister = () => {
   const { handleFiles, imageContainerRef } = useHooks();
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [newTitle, setNewTitle] = useAtom<string>(postTitleAtom);
-  const [newContent, setNewContent] = useAtom<string>(postContentAtom);
+  const [newContent, setNewContent] = useAtom<string | null>(postContentAtom);
   const [uploadImg, setUploadImg] = useAtom<File | null>(uploadImageAtom);
-  const [previewImg, setPreviewImg] = useAtom<string | undefined>(previewImgAtom)
+  const [previewImg, setPreviewImg] = useAtom<string | null>(previewImgAtom);
+  const [uploadMovie, setUploadMovie] = useAtom<File | null>(uploadMovieAtom);
+  const [previeMovie, setPrevieMovie] = useAtom<string | null>(previewMovieAtom);
+
   const [post, setPost] = useAtom<Post[]>(postAtom);
 
   const navigate = useNavigate();
@@ -70,7 +73,8 @@ export const PostRegister = () => {
         {
           title: newTitle,
           content: newContent,
-          image: imageUrl
+          image_url: imageUrl,
+          movie_url: previeMovie
         }
       ])
       .select(); // 挿入ﾃﾞｰﾀを取得
@@ -79,7 +83,7 @@ export const PostRegister = () => {
 
       // ローカル状態更新
       setPost((prevPost) => {
-        return [...prevPost, { id: dataBaseInsertResult.data[0].id, title: newTitle, content: newContent, image: imageUrl }]
+        return [...prevPost, { id: dataBaseInsertResult.data[0].id, title: newTitle, content: newContent, image_url: imageUrl, movie_url: previeMovie }]
       })
 
       // ﾌｧｲﾙ入力ﾘｾｯﾄ
@@ -90,10 +94,12 @@ export const PostRegister = () => {
       // ﾌｫｰﾑｸﾘｱ
       setNewTitle('');
       setNewContent('');
-      setPreviewImg(undefined);
+      setPreviewImg(null);
+      setPrevieMovie(null);
 
       // uploadのset関数をｸﾘｱ
       setUploadImg(null);
+      setUploadMovie(null);
 
       alert('投稿に成功しました');
 
@@ -117,7 +123,7 @@ export const PostRegister = () => {
         <label className='text-xl'>内容</label>
         <textarea
           className='border flex'
-          value={newContent}
+          value={newContent ?? ''}
           onChange={(e) => setNewContent(e.target.value)}
         />
         <label className='text-xl'>画像</label>

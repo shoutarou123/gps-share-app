@@ -11,6 +11,8 @@ export const loadingAtom = atom<boolean>(false);
 // 投稿登録管理atom
 export const postAtom = atom<Post[]>([]);
 export const postTitleAtom = atom<string>("");
-export const postContentAtom = atom<string>("");
+export const postContentAtom = atom<string | null>(null);
 export const uploadImageAtom = atom<File | null>(null);
-export const previewImgAtom = atom<string | undefined>("");
+export const previewImgAtom = atom<string | null>(null);
+export const uploadMovieAtom = atom<File | null>(null);
+export const previewMovieAtom = atom<string | null>(null);

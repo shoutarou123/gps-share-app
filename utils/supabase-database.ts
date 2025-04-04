@@ -12,146 +12,53 @@ export type Database = {
       posts: {
         Row: {
           content: string | null
+          created_at: string | null
           id: number
-          image: string | null
-          movie: string | null
+          image_url: string | null
+          movie_url: string | null
           title: string
+          updated_at: string | null
         }
         Insert: {
           content?: string | null
+          created_at?: string | null
           id?: number
-          image?: string | null
-          movie?: string | null
+          image_url?: string | null
+          movie_url?: string | null
           title: string
+          updated_at?: string | null
         }
         Update: {
           content?: string | null
+          created_at?: string | null
           id?: number
-          image?: string | null
-          movie?: string | null
+          image_url?: string | null
+          movie_url?: string | null
           title?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
       teams: {
         Row: {
+          cteated_at: string | null
           name: string
           team_id: number
+          updated_at: string | null
         }
         Insert: {
+          cteated_at?: string | null
           name: string
           team_id: number
+          updated_at?: string | null
         }
         Update: {
+          cteated_at?: string | null
           name?: string
           team_id?: number
+          updated_at?: string | null
         }
         Relationships: []
-      }
-      testpost: {
-        Row: {
-          id: number
-          title: string
-        }
-        Insert: {
-          id?: number
-          title: string
-        }
-        Update: {
-          id?: number
-          title?: string
-        }
-        Relationships: []
-      }
-      testteam: {
-        Row: {
-          name: string
-          team_id: number
-        }
-        Insert: {
-          name: string
-          team_id: number
-        }
-        Update: {
-          name?: string
-          team_id?: number
-        }
-        Relationships: []
-      }
-      testuser: {
-        Row: {
-          id: number
-          name: string
-        }
-        Insert: {
-          id?: number
-          name: string
-        }
-        Update: {
-          id?: number
-          name?: string
-        }
-        Relationships: []
-      }
-      testuser_testpost: {
-        Row: {
-          post_id: number
-          user_id: number
-        }
-        Insert: {
-          post_id: number
-          user_id: number
-        }
-        Update: {
-          post_id?: number
-          user_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "testuser_testpost_post_id_fkey"
-            columns: ["post_id"]
-            isOneToOne: false
-            referencedRelation: "testpost"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "testuser_testpost_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "testuser"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      testuser_testteam: {
-        Row: {
-          team_id: number
-          user_id: number
-        }
-        Insert: {
-          team_id: number
-          user_id: number
-        }
-        Update: {
-          team_id?: number
-          user_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "testuser_testteam_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "testteam"
-            referencedColumns: ["team_id"]
-          },
-          {
-            foreignKeyName: "testuser_testteam_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "testuser"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       user_post: {
         Row: {
@@ -217,32 +124,38 @@ export type Database = {
         Row: {
           adress: string
           age: number
+          created_at: string | null
           email: string
           id: number
-          image: string | null
+          image_url: string | null
           name: string
           password: string
           unit: string
+          updated_at: string | null
         }
         Insert: {
           adress: string
           age: number
+          created_at?: string | null
           email: string
           id?: number
-          image?: string | null
+          image_url?: string | null
           name: string
           password: string
           unit: string
+          updated_at?: string | null
         }
         Update: {
           adress?: string
           age?: number
+          created_at?: string | null
           email?: string
           id?: number
-          image?: string | null
+          image_url?: string | null
           name?: string
           password?: string
           unit?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
