@@ -110,3 +110,5 @@ setPost((prevPosts) => {
       setUploadImg(null);
 
       alert('投稿が成功しました');
+
+2025/04/06 Firebase 初期化を再度実施
