@@ -73,11 +73,11 @@ export const PostRegister = () => {
         {
           title: newTitle,
           content: newContent,
-          image_url: imageUrl,
+          image_url: imageUrl, // 公開URL形式でﾃﾞｰﾀﾍﾞｰｽへ保存
           movie_url: previeMovie
         }
       ])
-      .select(); // 挿入ﾃﾞｰﾀを取得
+      .select(); // 挿入ﾃﾞｰﾀを取得 postを更新するために必要
 
       if (dataBaseInsertResult.error) throw dataBaseInsertResult.error;
 
