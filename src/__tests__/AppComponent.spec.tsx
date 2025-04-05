@@ -1,10 +1,15 @@
 import App from "../App";
 import { render, screen } from "@testing-library/react";
 import Home from "../compornents/home";
+import { BrowserRouter } from "react-router";
 
 describe("title", () => {
   it("should render title", () => {
-    render(<Home />);
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    )
     expect(screen.getByText("home")).toBeInTheDocument();
   });
 });
