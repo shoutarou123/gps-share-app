@@ -81,13 +81,6 @@ export type Database = {
             referencedRelation: "posts"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "user_post_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
       }
       user_team: {
@@ -111,13 +104,6 @@ export type Database = {
             referencedRelation: "teams"
             referencedColumns: ["team_id"]
           },
-          {
-            foreignKeyName: "user_team_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
       }
       users: {
@@ -127,7 +113,6 @@ export type Database = {
           created_at: string | null
           email: string
           id: number
-          image_url: string | null
           name: string
           password: string
           unit: string
@@ -139,7 +124,6 @@ export type Database = {
           created_at?: string | null
           email: string
           id?: number
-          image_url?: string | null
           name: string
           password: string
           unit: string
@@ -151,7 +135,6 @@ export type Database = {
           created_at?: string | null
           email?: string
           id?: number
-          image_url?: string | null
           name?: string
           password?: string
           unit?: string
