@@ -6,6 +6,7 @@ export class User {
     public age: number,
     public adress: string,
     public email: string,
+    public password: string,
   ) {}
 
   public static newUser (
@@ -15,7 +16,8 @@ export class User {
     age: number,
     adress: string,
     email: string,
+    password: string,
   ) :User {
-    return new User(id, name, unit, age, adress, email);
+    return new User(id, name, unit, age, adress, email, password);
   }
 }

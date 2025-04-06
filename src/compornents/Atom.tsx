@@ -1,5 +1,9 @@
 import { atom } from "jotai";
 import { Post } from "../domain/post";
+import { User } from "../domain/user";
+
+// ユーザー登録情報管理用atom
+export const userRegisterAtom = atom<User | null>(null);
 
 // 緯度経度取得atom
 export const latitudeAtom = atom<number | null>(null);
