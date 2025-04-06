@@ -39,31 +39,64 @@ const handleClick = () => {
 
 
   return (
-    <div>
-      <h1 className='text-2xl font-bold'>サインアップページ</h1>
+    <div className='flex flex-col p-4'>
+      <div className='mx-auto '>
+
+      
+      <h1 className='text-2xl font-bold mb-6'>ユーザー登録</h1>
       <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
+        <label>名前</label>
+        <input
+        className='block border border-gray-300 w-70 p-2 rounded-md'
+        type='text'
+        />
+
+        <label>所属</label>
+        <input
+          className='block border border-gray-300 w-full p-2 rounded-md'
+          type='text'
+
+        />
+        
+        <label>年齢</label>
+        <input
+          className='block border border-gray-300 w-full p-2 rounded-md'
+          type='number'
+        />
+        
+        <label>住所</label>
+        <input
+          className='block border border-gray-300 w-full p-2 rounded-md'
+          type='text'
+        />
+        
         <label>メールアドレス</label>
         <input
           type="email"
           placeholder='メールアドレスを入力してください'
-          className='block border border-gray-300'
+          className='block border border-gray-300 w-full p-3 rounded-md'
           {...register("email")}
         />
+        
         <label>パスワード</label>
         <input
           type="password"
           placeholder='パスワードを入力してください'
-          className='block border border-gray-300'
+          className='block border border-gray-300 w-full p-3 rounded-md'
           {...register("password")}
         />
+        
+       <div className='flex flex-col space-y-4'>
         <button
         type="submit"
-        className='bg-blue-600 text-white hover:bg-blue-700'
-        >サインアップ</button>
-        <a className='hover:underline cursor-pointer hover:text-blue-600' onClick={handleClick}>アカウントを持っている場合</a>
+        className='bg-blue-600 text-white hover:bg-blue-700 rounded-md p-3'
+        >登録</button>
+
+        <a className='hover:underline cursor-pointer hover:text-blue-600 text-center' onClick={handleClick}>アカウントを持っている場合</a>
+        </div>
       </form>
 
-
+      </div>
     </div>
   )
 }
