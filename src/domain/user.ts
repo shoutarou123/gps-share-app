@@ -1,23 +1,23 @@
 export class User {
   constructor (
-    public id: number,
+    public id: string,
+    public user_id: number,
     public name: string,
     public unit: string,
     public age: number,
-    public adress: string,
+    public address: string,
     public email: string,
-    public password: string,
   ) {}
 
   public static newUser (
-    id: number,
+    id: string,
+    user_id: number,
     name: string,
     unit: string,
     age: number,
-    adress: string,
+    address: string,
     email: string,
-    password: string,
   ) :User {
-    return new User(id, name, unit, age, adress, email, password);
+    return new User(id, user_id, name, unit, age, address, email);
   }
 }

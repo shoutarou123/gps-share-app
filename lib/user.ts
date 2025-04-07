@@ -8,7 +8,7 @@ export async function GetAllUsers() : Promise<User[]>{ //User型のｵﾌﾞｼ�
   }
 
   const usersData = response.data.map((user) => {
-    return new User(user.id, user.name, user.unit, user.age, user.adress, user.email, user.adress)
+    return new User(user.id, user.user_id, user.name, user.unit, user.age, user.address, user.email)
   });
   return usersData;
 }
