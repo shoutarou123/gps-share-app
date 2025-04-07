@@ -11,7 +11,15 @@ jobs: # workflowで実行されるjobを定義
     runs-on: ubuntu-latest # jobが実行される環境をubuntuの最新ﾊﾞｰｼﾞｮﾝとしている
     steps: # job内で実行されるｽﾃｯﾌﾟを定義
       - uses: actions/checkout@v4 # GitHub repositoryのcodeをlocalにdownloadしてworkflowで使用できるようにする。versionはv4
+      
+      # .envﾌｧｲﾙを作成
+      - name: Set up .env file
+        run: |
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env
+          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> .env
+
       - run: npm ci && npm run build # npm ci で依存関係をinstallし、npm run buildでprojectをbuildする
+      
       - uses: FirebaseExtended/action-hosting-deploy@v0 # Firebase Hostingにdeployするためのactionを使用。versionはv0
         with: # actionに渡すparameterを指定
           repoToken: ${{ secrets.GITHUB_TOKEN }} # GigHub repositoryのtokenを使用。tokenはGiHubのｼｰｸﾚｯﾄに保存されている
