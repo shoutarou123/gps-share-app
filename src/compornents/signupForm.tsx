@@ -1,50 +1,65 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { isRouteErrorResponse, useNavigate } from 'react-router';
 import { supabase } from '../../utils/supabase';
 import { User } from '../domain/user';
 import { useAtom } from 'jotai';
 import { userRegisterAtom } from './Atom';
 
+// ﾌｫｰﾑ専用の型
+type SignUpFormData = {
+  name: string;
+  unit: string;
+  age: number;
+  address: string;
+  email: string;
+  password: string; // ﾌｫｰﾑ入力でのみ使用
+};
 
 export const SignupForm = () => {
+  const navigate = useNavigate();
+  const [ userInfomation, setUserInfomation ] = useAtom(userRegisterAtom);
 
-// supabase認証テーブルのメールアドレスの重複チェック
-// const checkEmailExists = async (email: string): Promise<boolean> => {
-//   const { data: authSelectData, error: authSelectError } = await supabase
-//   .from('auth.users')
-//   .select('email')
-//   .eq('email', email);
+// メールアドレスの重複チェック（APIﾙｰﾄ経由）
+const checkEmailExists = async (email: string): Promise<boolean> => {
+  try {
+    const response = await fetch('http://localhost:3000/api/check-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
 
-//   if (authSelectError) {
-//     console.error(authSelectError?.message);
-//     return false;
-//   }
-//   return authSelectData && authSelectData.length > 0; // メールアドレスが存在すればtrureを返す
-// }
+    if(!response.ok) {
+      console.error('サーバーエラー', response.status);
+      return false;
+    }
 
+    const result = await response.json();
+    return result.exists;
+  } catch (err) {
+    console.error('メールアドレス確認エラー:', err);
+    return false;
+  }
+};
 
-const navigate = useNavigate();
-const [ userInfomation, setUserInfomation ] = useAtom(userRegisterAtom);
-
-
-const {register, handleSubmit, reset} = useForm<User>({defaultValues:{name: "", unit: "", age: 0, adress: "", email:"", password:""}}); // defaultValuesを入れることによりﾌｫｰﾑ全体を管理できる
+const {register, handleSubmit, reset} = useForm<SignUpFormData>({defaultValues:{name: "", unit: "", age: 0, address: "", email:"", password:""}}); // defaultValuesを入れることによりﾌｫｰﾑ全体を管理できる
  // react-hook-form では、ﾌｫｰﾑの各入力ﾌｨｰﾙﾄﾞが一つ一つ独立して状態を管理されるわけではなく、 複数のﾌｨｰﾙﾄﾞを一つのｵﾌﾞｼﾞｪｸﾄとして管理しているため、引数はｵﾌﾞｼﾞｪｸﾄになる。
-const onSubmit: SubmitHandler<User> = async (data: User) => {
+
+ const onSubmit: SubmitHandler<SignUpFormData> = async (data: SignUpFormData) => {
   try { // SubmitHandler は、react-hook-form ﾗｲﾌﾞﾗﾘから提供されている型で、ﾌｫｰﾑの送信処理を行う関数に使う。この型は、ﾌｫｰﾑの入力ﾃﾞｰﾀが正しくﾊﾞﾘﾃﾞｰﾄされた後に呼ばれる submit handler の型を定義するために使われます。
-    const { name, unit, age, adress, email, password } = data; // dataに入っているemail,passwordを取り出す
+    const { email } = data; // dataに入っているemail,passwordを取り出す
 
     // メールアドレス重複チェック
-    // const emailExists = await checkEmailExists(email);
-    // if (emailExists) {
-    //   alert("このメールアドレスは既に登録されています");
-    //   return;
-    // }
+    const emailExists = await checkEmailExists(email);
+    if (emailExists) {
+      alert("このメールアドレスは既に登録されています");
+      return;
+    }
 
     // サインアップ処理
     const { data: signUpData, error } = await supabase.auth.signUp({
       // supabaseにemail等を渡してからerrorを取り出す
-      email,
-      password,
+      email: data.email,
+      password: data.password,
       // locationとは、現在表示されているｳｪﾌﾞﾍﾟｰｼﾞのURLを抽出したり、別のﾍﾟｰｼﾞへ遷移する場合などに便利なｵﾌﾞｼﾞｪｸﾄ。
        // location.origin	ﾌﾟﾛﾄｺﾙﾎﾟｰﾄを含めたURLを取得する もしﾕｰｻﾞｰがhogehogeというURLで登録していた場合、登録後のﾒｰﾙについているﾘﾝｸ先がhogehoge/welcomになる。
     });
@@ -59,11 +74,28 @@ const onSubmit: SubmitHandler<User> = async (data: User) => {
     throw new Error(error.message); // errorをｽﾛｰする
     }
 
-    // テーブルに登録データを保存
-    await supabase.from('users').insert([{name, unit, age, adress, email, password}]);
+    // Authが生成したUUIDを取得
+    const authUserId = signUpData.user?.id;
+    if (!authUserId) {
+      throw new Error("ユーザー登録に失敗しました");
+    }
+
+    // テーブルに登録データを保存 passwordは保存しない
+    const { data: insertedData, error: dbError } = await supabase
+    .from('users')
+    .insert([
+      {id: authUserId, name: data.name, unit: data.unit, age: data.age, address: data.address, email: data.email}
+    ])
+    .select(); // 挿入されたデータ取得
+    ;
+
+    if (dbError || !insertedData || insertedData.length === 0) {
+      throw new Error("データベースへの登録が失敗しました");
+    }
 
     // set関数に登録データを保存
-    setUserInfomation(data);
+    setUserInfomation(insertedData[0]);
+
     alert("登録に成功しました");
     navigate("/login"); // 成功したらrootに遷移
   } catch (err) {
@@ -113,7 +145,7 @@ const handleClick = () => {
         <input
           className='block border border-gray-300 w-full p-2 rounded-md'
           type='text'
-          {...register("adress", { required: true })}
+          {...register("address", { required: true })}
           placeholder="都道府県・市町村名を入力してください"
         />
 
