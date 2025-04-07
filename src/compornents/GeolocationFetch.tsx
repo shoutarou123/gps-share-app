@@ -21,7 +21,7 @@ export const GeolocationFetch = () => {
   // 位置情報監視成功関数
   const WatchSuccessCallback = (position :GeolocationPosition) => {
     setLatitude(position.coords.latitude);
-    setLongitude(position.coords.latitude);
+    setLongitude(position.coords.longitude);
   }
   
   // 位置情報監視失敗関数
