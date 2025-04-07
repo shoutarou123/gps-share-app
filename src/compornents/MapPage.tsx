@@ -1,10 +1,24 @@
-import React from 'react'
+import L from 'leaflet'; // Lはleafletｸﾞﾛｰﾊﾞﾙｵﾌﾞｼﾞｪｸﾄ
+import markerIcon from '../../node_modules/leaflet/dist/images/marker-icon.png'
+import markerShadow from '../../node_modules/leaflet/dist/images/marker-shadow.png'
 
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import '../../node_modules/leaflet/dist/leaflet.css'; // 追加
 import { useAtomValue } from 'jotai';
 import { latitudeAtom, longitudeAtom } from './Atom';
 import { CenterMapButton } from './CenterMapButton';
+
+
+const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
+  iconUrl: markerIcon, // iconとして表示する画像のURL
+  shadowUrl: markerShadow, // ﾏｰｶｰに影を表示する場合その影のURL
+  iconSize: [25, 41], // ｱｲｺﾝ画像の幅と高さﾋﾟｸｾﾙ単位
+  iconAnchor: [12, 41], // ｱｲｺﾝ画像のどの点が地図上の座標と一致するか ﾋﾟｸｾﾙ単位
+  popupAnchor: [1, -34], // ﾎﾟｯﾌﾟｱｯﾌﾟｳｨﾝﾄﾞｳがｱｲｺﾝ画像からどのくらい離れるか
+  shadowSize: [41, 41] // 影画像の幅と高さ
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 export const MapPage = () => {
   const latitude = useAtomValue(latitudeAtom);

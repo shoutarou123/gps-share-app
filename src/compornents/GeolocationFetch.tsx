@@ -20,7 +20,8 @@ export const GeolocationFetch = () => {
   
   // 位置情報監視成功関数
   const WatchSuccessCallback = (position :GeolocationPosition) => {
-    console.log('監視中の位置情報', position.coords);
+    setLatitude(position.coords.latitude);
+    setLongitude(position.coords.latitude);
   }
   
   // 位置情報監視失敗関数

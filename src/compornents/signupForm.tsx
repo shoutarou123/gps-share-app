@@ -9,18 +9,18 @@ import { userRegisterAtom } from './Atom';
 export const SignupForm = () => {
 
 // supabase認証テーブルのメールアドレスの重複チェック
-const checkEmailExists = async (email: string): Promise<boolean> => {
-  const { data: authSelectData, error: authSelectError } = await supabase
-  .from('auth.users')
-  .select('email')
-  .eq('email', email);
+// const checkEmailExists = async (email: string): Promise<boolean> => {
+//   const { data: authSelectData, error: authSelectError } = await supabase
+//   .from('auth.users')
+//   .select('email')
+//   .eq('email', email);
 
-  if (authSelectError) {
-    console.error(authSelectError?.message);
-    return false;
-  }
-  return authSelectData && authSelectData.length > 0; // メールアドレスが存在すればtrureを返す
-}
+//   if (authSelectError) {
+//     console.error(authSelectError?.message);
+//     return false;
+//   }
+//   return authSelectData && authSelectData.length > 0; // メールアドレスが存在すればtrureを返す
+// }
 
 
 const navigate = useNavigate();
@@ -34,11 +34,11 @@ const onSubmit: SubmitHandler<User> = async (data: User) => {
     const { name, unit, age, adress, email, password } = data; // dataに入っているemail,passwordを取り出す
 
     // メールアドレス重複チェック
-    const emailExists = await checkEmailExists(email);
-    if (emailExists) {
-      alert("このメールアドレスは既に登録されています");
-      return;
-    }
+    // const emailExists = await checkEmailExists(email);
+    // if (emailExists) {
+    //   alert("このメールアドレスは既に登録されています");
+    //   return;
+    // }
 
     // サインアップ処理
     const { data: signUpData, error } = await supabase.auth.signUp({
@@ -50,10 +50,10 @@ const onSubmit: SubmitHandler<User> = async (data: User) => {
     });
 
     // ここでも簡易的なメールアドレス重複チェック identitiesは登録済のｱﾄﾞﾚｽなら空の配列を返す
-    // if (signUpData.user?.identities?.length === 0) {
-    //   alert("既に登録済のユーザーです");
-    //   return;
-    // };
+    if (signUpData.user?.identities?.length === 0) {
+      alert("既に登録済のユーザーです");
+      return;
+    };
 
     if (error) { // 上で取り出したerrorがtrueなら
     throw new Error(error.message); // errorをｽﾛｰする
