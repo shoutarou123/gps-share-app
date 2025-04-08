@@ -1,14 +1,15 @@
 import { useAtomValue } from 'jotai'
-import React, { useEffect } from 'react'
-import { latitudeAtom, longitudeAtom } from './Atom'
+import { useEffect } from 'react'
+import { rankLatitudeAtom, rankLongitudeAtom } from './Atom'
 import { useMap } from 'react-leaflet';
 
 export const AutoFlyTo = () => {
-  const latitude = useAtomValue(latitudeAtom);
-  const longitude = useAtomValue(longitudeAtom);
+  const latitude = useAtomValue(rankLatitudeAtom);
+  const longitude = useAtomValue(rankLongitudeAtom);
   const map = useMap();
 
   useEffect(() => {
+    console.log('AutoFly作動 AutoFlyTo:', latitude, 'longitude:', longitude);
     if(latitude && longitude) {
       map.flyTo([latitude, longitude], map.getZoom());
     }

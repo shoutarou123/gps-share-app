@@ -2,15 +2,17 @@ import L from 'leaflet'; // Lはleafletｸﾞﾛｰﾊﾞﾙｵﾌﾞｼﾞｪ�
 import markerIcon from '../../node_modules/leaflet/dist/images/marker-icon.png'
 import markerShadow from '../../node_modules/leaflet/dist/images/marker-shadow.png'
 
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import '../../node_modules/leaflet/dist/leaflet.css'; // 追加
-import { useAtomValue } from 'jotai';
-import { latitudeAtom, longitudeAtom } from './Atom';
+import { useAtom, useAtomValue } from 'jotai';
+import { latitudeAtom, longitudeAtom, manualLatitudeAtom, manualLongitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 import { CenterMapButton } from './CenterMapButton';
 import { ToHomeButton } from './ToHomeButton';
 import { AutoFlyTo } from './AutoFlyTo';
 import { CurrentCoordinate } from './CurrentCoordinate';
 
+import { useGeoWatcher } from './useGeoWatcher';
+import { useEffect } from 'react';
 
 const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
   iconUrl: markerIcon, // iconとして表示する画像のURL
@@ -24,8 +26,27 @@ const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
 L.Marker.prototype.options.icon = DefaultIcon;
 
 export const MapPage = () => {
+
   const latitude = useAtomValue(latitudeAtom);
   const longitude = useAtomValue(longitudeAtom);
+  const [ watchedLatitude , setWatchedLatitude ] = useAtom(watchedLatitudeAtom);
+  const [ watchedLongitude , setWatchedLongitude ] = useAtom(watchedLongitudeAtom);
+  const manualLatitude = useAtomValue(manualLatitudeAtom);
+
+  // 位置管理ロジック
+  useEffect(() => {
+    const watchId = navigator.geolocation.watchPosition((position) => {
+      console.log('watchのpositon値', position);
+      if (manualLatitude === null) {
+        setWatchedLatitude(position.coords.latitude);
+        setWatchedLongitude(position.coords.longitude);
+      }
+    },
+    (error) => console.error('watch位置情報取得エラー', error),
+    { enableHighAccuracy: true }
+  );
+  return () => navigator.geolocation.clearWatch(watchId);
+  }, [manualLatitude]);
 
   return (
     <>
@@ -42,10 +63,11 @@ export const MapPage = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-          <CurrentCoordinate />
-          <CenterMapButton />
+          <CurrentCoordinate /> {/* 座標表示 */}
+          {/* <CenterMapButton /> */}
+           {/* 現在地に移動ボタン */}
           <ToHomeButton />
-          <AutoFlyTo/>
+          <AutoFlyTo/> {/* 追従 */}
         <Marker
           key={`${latitude}-${longitude}`}
           position={
@@ -53,7 +75,7 @@ export const MapPage = () => {
           }
         >
           <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
+           現在地： <br /> {latitude?.toFixed(6)}, {longitude?.toFixed(6)}
           </Popup>
         </Marker>
       </MapContainer>

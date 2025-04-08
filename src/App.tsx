@@ -23,6 +23,7 @@ import { PostRegister } from "./compornents/post_register";
 import { Posts } from "./compornents/posts";
 import { Welcome } from "./compornents/Welcome";
 
+
 const usersAtom = atom<User[]>([]); // user情報を管理するatom
 const loadingAtom = atom(false)
 
