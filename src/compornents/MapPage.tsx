@@ -8,6 +8,7 @@ import { useAtomValue } from 'jotai';
 import { latitudeAtom, longitudeAtom } from './Atom';
 import { CenterMapButton } from './CenterMapButton';
 import { ToHomeButton } from './ToHomeButton';
+import { AutoFlyTo } from './AutoFlyTo';
 
 
 const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
@@ -44,6 +45,7 @@ export const MapPage = () => {
         />
           <CenterMapButton />
           <ToHomeButton />
+          <AutoFlyTo />
         <Marker
           position={
             latitude && longitude ? [latitude, longitude] : [35.681641, 139.766921]
