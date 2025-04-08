@@ -9,6 +9,7 @@ import { latitudeAtom, longitudeAtom } from './Atom';
 import { CenterMapButton } from './CenterMapButton';
 import { ToHomeButton } from './ToHomeButton';
 import { AutoFlyTo } from './AutoFlyTo';
+import { CurrentCoordinate } from './CurrentCoordinate';
 
 
 const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
@@ -28,8 +29,6 @@ export const MapPage = () => {
 
   return (
     <>
-    <h1>{latitude}</h1>
-    <h1>{longitude}</h1>
       <MapContainer
         center={
           latitude && longitude ? [latitude, longitude] : [35.681641, 139.766921]
@@ -43,10 +42,12 @@ export const MapPage = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+          <CurrentCoordinate />
           <CenterMapButton />
           <ToHomeButton />
-          <AutoFlyTo />
+          <AutoFlyTo/>
         <Marker
+          key={`${latitude}-${longitude}`}
           position={
             latitude && longitude ? [latitude, longitude] : [35.681641, 139.766921]
           }
