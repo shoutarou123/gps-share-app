@@ -17,7 +17,7 @@ export default function LoginForm() {
       const { email, password } = data;
       const { error } = await supabase.auth.signInWithPassword({
         email,
-        password
+        password,
       });
       if (error) {
         throw new Error(error.message);
@@ -36,34 +36,40 @@ export default function LoginForm() {
   };
 
   return (
-    <div>
-      <h1 className='text-2xl font-bold'>ログインページ</h1>
-      <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
-        <label>メールアドレス</label>
-        <input
-          type="email"
-          placeholder='メールアドレスを入力してください'
-          className='block border border-gray-300'
-          {...register("email")}
-        />
+    <div className='flex flex-col'>
+      <div className='space-y-4 mx-auto'>
 
-        <label>パスワード</label>
-        <input
-          type="password"
-          placeholder='パスワードを入力してください'
-          className='block border border-gray-300'
-          {...register("password")}
-        />
+        <h1 className='text-center text-2xl font-bold m-6'>ログインページ</h1>
 
-        <button
-          type="submit"
-          className='bg-blue-600 text-white hover:bg-blue-700 hover:cursor-pointer'
-        >
-          ログイン
-        </button>
-        <a className='hover:underline cursor-pointer hover:text-blue-600' onClick={handleClick}>パスワードを忘れた</a>
-      </form>
+        <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
 
+          <label>メールアドレス</label>
+          <input
+            type="email"
+            placeholder='メールアドレスを入力してください'
+            className='block border border-gray-300 w-70 p-2 rounded-md'
+            {...register("email")}
+          />
+
+          <label>パスワード</label>
+          <input
+            type="password"
+            placeholder='パスワードを入力してください'
+            className='block border border-gray-300 w-full p-2 rounded-md'
+            {...register("password")}
+          />
+
+          <div className='flex flex-col space-y-4'>
+            <button
+              type="submit"
+              className='bg-blue-600 text-white rounded-md p-3 hover:bg-blue-700 hover:cursor-pointer'
+            >
+              ログイン
+            </button>
+            <a className='text-center hover:underline cursor-pointer hover:text-blue-600' onClick={handleClick}>パスワードを忘れた</a>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

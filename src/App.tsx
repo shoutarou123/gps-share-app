@@ -22,6 +22,7 @@ import { MapPage } from "./compornents/MapPage";
 import { GeolocationFetch } from "./compornents/GeolocationFetch";
 import { PostRegister } from "./compornents/post_register";
 import { Posts } from "./compornents/posts";
+import { Welcome } from "./compornents/Welcome";
 
 const usersAtom = atom<User[]>([]); // user情報を管理するatom
 const loadingAtom = atom(false)
@@ -74,6 +75,8 @@ function App() {
           <Route path="mapPage" element={<MapPage />} />
 
           <Route path="golocationFetch" element={<GeolocationFetch />} />
+
+          <Route path="welcome" element={<Welcome />} />
         </Routes>
       </BrowserRouter>
     {/* )} */}

@@ -60,6 +60,9 @@ const {register, handleSubmit, reset} = useForm<SignUpFormData>({defaultValues:{
       // supabaseにemail等を渡してからerrorを取り出す
       email: data.email,
       password: data.password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/welcome`
+      }
       // locationとは、現在表示されているｳｪﾌﾞﾍﾟｰｼﾞのURLを抽出したり、別のﾍﾟｰｼﾞへ遷移する場合などに便利なｵﾌﾞｼﾞｪｸﾄ。
        // location.origin	ﾌﾟﾛﾄｺﾙﾎﾟｰﾄを含めたURLを取得する もしﾕｰｻﾞｰがhogehogeというURLで登録していた場合、登録後のﾒｰﾙについているﾘﾝｸ先がhogehoge/welcomになる。
     });
