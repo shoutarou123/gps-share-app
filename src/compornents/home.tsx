@@ -1,19 +1,17 @@
 import React from 'react'
 import { useNavigate } from 'react-router'
+import { GeolocationFetchButton } from './GeolocationFetchButton';
 
 export default function Home() {
   const navigate = useNavigate();
   return (
     <>
-      <h1>home</h1>
+      <h1>位置情報管理システム</h1>
       <div
       className='flex flex-col space-y-10'
       >
 
-        <button
-          className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
-          onClick={() => navigate("/golocationFetch")}
-        >位置情報取得画面へ</button>
+        <GeolocationFetchButton />
 
         <button
           className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'

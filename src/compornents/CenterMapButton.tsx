@@ -26,7 +26,7 @@ export const CenterMapButton = (): React.JSX.Element => {
   return (
 
     <button
-      className='border bg-blue-500 absolute z-[1000] right-4'
+      className='border bg-blue-500 hover:bg-blue-400 cursor-pointer border-blue-500 rounded text-white absolute z-[1000] p-2 right-4 mt-5 mr-10'
       onClick={handleClickSetView}
     >
       現在地に移動

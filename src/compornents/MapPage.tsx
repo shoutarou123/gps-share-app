@@ -7,6 +7,7 @@ import '../../node_modules/leaflet/dist/leaflet.css'; // 追加
 import { useAtomValue } from 'jotai';
 import { latitudeAtom, longitudeAtom } from './Atom';
 import { CenterMapButton } from './CenterMapButton';
+import { ToHomeButton } from './ToHomeButton';
 
 
 const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
@@ -42,6 +43,7 @@ export const MapPage = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
           <CenterMapButton />
+          <ToHomeButton />
         <Marker
           position={
             latitude && longitude ? [latitude, longitude] : [35.681641, 139.766921]

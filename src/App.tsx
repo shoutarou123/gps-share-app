@@ -19,7 +19,6 @@ import { SignOut } from "./compornents/SignOut";
 import { ResetPasswordForm } from "./compornents/ResetPasswordForm";
 import { PasswordReset } from "./compornents/PasswordReset";
 import { MapPage } from "./compornents/MapPage";
-import { GeolocationFetch } from "./compornents/GeolocationFetch";
 import { PostRegister } from "./compornents/post_register";
 import { Posts } from "./compornents/posts";
 import { Welcome } from "./compornents/Welcome";
@@ -74,7 +73,6 @@ function App() {
 
           <Route path="mapPage" element={<MapPage />} />
 
-          <Route path="golocationFetch" element={<GeolocationFetch />} />
 
           <Route path="welcome" element={<Welcome />} />
         </Routes>
