@@ -10,6 +10,6 @@ describe("title", () => {
         <Home />
       </BrowserRouter>
     )
-    expect(screen.getByText("home")).toBeInTheDocument();
+    expect(screen.getByText("位置情報管理システム")).toBeInTheDocument();
   });
 });
