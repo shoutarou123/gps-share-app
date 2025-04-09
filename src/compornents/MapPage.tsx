@@ -52,7 +52,7 @@ export const MapPage = () => {
     <>
       <MapContainer
         center={
-          latitude && longitude ? [latitude, longitude] : [35.681641, 139.766921]
+          watchedLatitude && watchedLongitude ? [watchedLatitude, watchedLongitude] : [35.681641, 139.766921]
         }
         zoom={17}
         scrollWheelZoom={true} // scrollでzoom可
@@ -64,18 +64,18 @@ export const MapPage = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
           <CurrentCoordinate /> {/* 座標表示 */}
-          {/* <CenterMapButton /> */}
+          <CenterMapButton />
            {/* 現在地に移動ボタン */}
           <ToHomeButton />
           <AutoFlyTo/> {/* 追従 */}
         <Marker
-          key={`${latitude}-${longitude}`}
+          key={`${watchedLatitude}-${watchedLongitude}`}
           position={
-            latitude && longitude ? [latitude, longitude] : [35.681641, 139.766921]
+            watchedLatitude && watchedLongitude ? [watchedLatitude, watchedLongitude] : [35.681641, 139.766921]
           }
         >
           <Popup>
-           現在地： <br /> {latitude?.toFixed(6)}, {longitude?.toFixed(6)}
+           現在地： <br /> {watchedLatitude?.toFixed(6)}, {watchedLongitude?.toFixed(6)}
           </Popup>
         </Marker>
       </MapContainer>

@@ -1,4 +1,4 @@
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import React from 'react'
 import { latitudeAtom, longitudeAtom, manualLatitudeAtom, manualLongitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 import { useMap } from 'react-leaflet';
@@ -6,34 +6,28 @@ import { useMap } from 'react-leaflet';
 export const CenterMapButton = (): React.JSX.Element => {
   const [manualLatitude, setManualLatitude] = useAtom(manualLatitudeAtom);
   const [manualLongitude, setManualLongitude] = useAtom(manualLongitudeAtom);
-  const setWatchedLatitude = useSetAtom(watchedLatitudeAtom)
-  const setWatchedLongitude = useSetAtom(watchedLongitudeAtom)
+  const watchedLatitude = useAtomValue(watchedLatitudeAtom)
+  const watchedLongitude = useAtomValue(watchedLongitudeAtom)
   const map = useMap();
 
   const handleClickSetView = () => {
     console.log('ボタンがクリックされました');
-    
+
       // 監視値ﾘｾｯﾄ
-      setWatchedLatitude(null);
-      setWatchedLongitude(null);
-      
-    navigator.geolocation.getCurrentPosition((location) => {
-      console.log('現在地に戻るのlocation値', location);
-      setManualLatitude(location.coords.latitude);
-      setManualLongitude(location.coords.longitude);
+      // setWatchedLatitude(null);
+      // setWatchedLongitude(null);
 
+    // navigator.geolocation.getCurrentPosition((location) => {
+    //   console.log('現在地に戻るのlocation値', location);
+    //   setManualLatitude(location.coords.latitude);
+    //   setManualLongitude(location.coords.longitude);
 
-      map.setView([location.coords.latitude, location.coords.longitude]);
+    if (watchedLatitude && watchedLongitude) {
+      map.setView([watchedLatitude, watchedLongitude]);
       console.log('地図の中心を更新しました');
-    },
-      (error) => {
-        console.error('現在地に戻る機能エラー', error);
-        if (error.code === error.TIMEOUT) {
-          console.log('位置情報の取得がタイムアウトしました');
-        }
-      },
-      { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
-    );
+    } else {
+      console.log('wathed位置情報なし');
+    }
   };
   // locationの中身
   // GeolocationPosition {coords: GeolocationCoordinates, timestamp: 1743864790216}
