@@ -65,9 +65,9 @@ export const MapPage = () => {
         />
           <CurrentCoordinate /> {/* 座標表示 */}
           <CenterMapButton /> {/* 現在地に移動ボタン */}
-
           <ToHomeButton />
-          <AutoFlyTo/> {/* 追従 */}
+          {/* <AutoFlyTo/> */}
+          {/* 追従 */}
         <Marker
           key={`${watchedLatitude}-${watchedLongitude}`}
           position={
