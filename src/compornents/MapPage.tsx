@@ -26,7 +26,7 @@ const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
 L.Marker.prototype.options.icon = DefaultIcon;
 
 export const MapPage = () => {
-
+  useGeoWatcher();
   const latitude = useAtomValue(latitudeAtom);
   const longitude = useAtomValue(longitudeAtom);
   const [ watchedLatitude , setWatchedLatitude ] = useAtom(watchedLatitudeAtom);
@@ -34,19 +34,19 @@ export const MapPage = () => {
   const manualLatitude = useAtomValue(manualLatitudeAtom);
 
   // 位置管理ロジック
-  useEffect(() => {
-    const watchId = navigator.geolocation.watchPosition((position) => {
-      console.log('watchのpositon値', position);
-      if (manualLatitude === null) {
-        setWatchedLatitude(position.coords.latitude);
-        setWatchedLongitude(position.coords.longitude);
-      }
-    },
-    (error) => console.error('watch位置情報取得エラー', error),
-    { enableHighAccuracy: true }
-  );
-  return () => navigator.geolocation.clearWatch(watchId);
-  }, [manualLatitude]);
+  // useEffect(() => {
+  //   const watchId = navigator.geolocation.watchPosition((position) => {
+  //     console.log('watchのpositon値', position);
+  //     if (manualLatitude === null) {
+  //       setWatchedLatitude(position.coords.latitude);
+  //       setWatchedLongitude(position.coords.longitude);
+  //     }
+  //   },
+  //   (error) => console.error('watch位置情報取得エラー', error),
+  //   { enableHighAccuracy: true }
+  // );
+  // return () => navigator.geolocation.clearWatch(watchId);
+  // }, [manualLatitude]);
 
   return (
     <>
@@ -64,8 +64,8 @@ export const MapPage = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
           <CurrentCoordinate /> {/* 座標表示 */}
-          <CenterMapButton />
-           {/* 現在地に移動ボタン */}
+          <CenterMapButton /> {/* 現在地に移動ボタン */}
+
           <ToHomeButton />
           <AutoFlyTo/> {/* 追従 */}
         <Marker

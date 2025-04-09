@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from 'react'
-import { latitudeAtom, longitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
-import { useSetAtom } from 'jotai';
+import { latitudeAtom, longitudeAtom, manualLatitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { toast } from 'react-toastify'
 
 
 export const useGeoWatcher = () => {
   const setWatchedLatitude = useSetAtom(watchedLatitudeAtom);
   const setWatchedLongitude = useSetAtom(watchedLongitudeAtom);
+  const manualLatitude = useAtomValue(manualLatitudeAtom);
   const watchIdRef = useRef<number | null>(null);
 
   const WatchSuccessCallback = (position: GeolocationPosition) => {
