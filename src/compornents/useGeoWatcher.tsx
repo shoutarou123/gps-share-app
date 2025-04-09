@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { latitudeAtom, longitudeAtom, manualLatitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
+import { latitudeAtom, longitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { toast } from 'react-toastify'
 
@@ -7,7 +7,6 @@ import { toast } from 'react-toastify'
 export const useGeoWatcher = () => {
   const setWatchedLatitude = useSetAtom(watchedLatitudeAtom);
   const setWatchedLongitude = useSetAtom(watchedLongitudeAtom);
-  const manualLatitude = useAtomValue(manualLatitudeAtom);
   const watchIdRef = useRef<number | null>(null);
 
   const WatchSuccessCallback = (position: GeolocationPosition) => {

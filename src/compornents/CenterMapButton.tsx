@@ -1,11 +1,9 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import React from 'react'
-import { latitudeAtom, longitudeAtom, manualLatitudeAtom, manualLongitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
+import { watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 import { useMap } from 'react-leaflet';
 
 export const CenterMapButton = (): React.JSX.Element => {
-  const [manualLatitude, setManualLatitude] = useAtom(manualLatitudeAtom);
-  const [manualLongitude, setManualLongitude] = useAtom(manualLongitudeAtom);
   const watchedLatitude = useAtomValue(watchedLatitudeAtom)
   const watchedLongitude = useAtomValue(watchedLongitudeAtom)
   const map = useMap();
