@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { latitudeAtom, longitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { toast } from 'react-toastify'
 
 

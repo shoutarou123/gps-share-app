@@ -5,10 +5,10 @@ import markerShadow from '../../node_modules/leaflet/dist/images/marker-shadow.p
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import '../../node_modules/leaflet/dist/leaflet.css'; // 追加
 import { useAtom, useAtomValue } from 'jotai';
-import { latitudeAtom, longitudeAtom, manualLatitudeAtom, manualLongitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
+import { latitudeAtom, longitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 import { CenterMapButton } from './CenterMapButton';
 import { ToHomeButton } from './ToHomeButton';
-import { AutoFlyTo } from './AutoFlyTo';
+// import { AutoFlyTo } from './AutoFlyTo';
 import { CurrentCoordinate } from './CurrentCoordinate';
 
 import { useGeoWatcher } from './useGeoWatcher';
@@ -26,33 +26,32 @@ const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
 L.Marker.prototype.options.icon = DefaultIcon;
 
 export const MapPage = () => {
-
+  useGeoWatcher();
   const latitude = useAtomValue(latitudeAtom);
   const longitude = useAtomValue(longitudeAtom);
   const [ watchedLatitude , setWatchedLatitude ] = useAtom(watchedLatitudeAtom);
   const [ watchedLongitude , setWatchedLongitude ] = useAtom(watchedLongitudeAtom);
-  const manualLatitude = useAtomValue(manualLatitudeAtom);
 
   // 位置管理ロジック
-  useEffect(() => {
-    const watchId = navigator.geolocation.watchPosition((position) => {
-      console.log('watchのpositon値', position);
-      if (manualLatitude === null) {
-        setWatchedLatitude(position.coords.latitude);
-        setWatchedLongitude(position.coords.longitude);
-      }
-    },
-    (error) => console.error('watch位置情報取得エラー', error),
-    { enableHighAccuracy: true }
-  );
-  return () => navigator.geolocation.clearWatch(watchId);
-  }, [manualLatitude]);
+  // useEffect(() => {
+  //   const watchId = navigator.geolocation.watchPosition((position) => {
+  //     console.log('watchのpositon値', position);
+  //     if (manualLatitude === null) {
+  //       setWatchedLatitude(position.coords.latitude);
+  //       setWatchedLongitude(position.coords.longitude);
+  //     }
+  //   },
+  //   (error) => console.error('watch位置情報取得エラー', error),
+  //   { enableHighAccuracy: true }
+  // );
+  // return () => navigator.geolocation.clearWatch(watchId);
+  // }, [manualLatitude]);
 
   return (
     <>
       <MapContainer
         center={
-          latitude && longitude ? [latitude, longitude] : [35.681641, 139.766921]
+          watchedLatitude && watchedLongitude ? [watchedLatitude, watchedLongitude] : [35.681641, 139.766921]
         }
         zoom={17}
         scrollWheelZoom={true} // scrollでzoom可
@@ -64,18 +63,18 @@ export const MapPage = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
           <CurrentCoordinate /> {/* 座標表示 */}
-          {/* <CenterMapButton /> */}
-           {/* 現在地に移動ボタン */}
+          <CenterMapButton /> {/* 現在地に移動ボタン */}
           <ToHomeButton />
-          <AutoFlyTo/> {/* 追従 */}
+          {/* <AutoFlyTo/> */}
+          {/* 追従 */}
         <Marker
-          key={`${latitude}-${longitude}`}
+          key={`${watchedLatitude}-${watchedLongitude}`}
           position={
-            latitude && longitude ? [latitude, longitude] : [35.681641, 139.766921]
+            watchedLatitude && watchedLongitude ? [watchedLatitude, watchedLongitude] : [35.681641, 139.766921]
           }
         >
           <Popup>
-           現在地： <br /> {latitude?.toFixed(6)}, {longitude?.toFixed(6)}
+           現在地： <br /> {watchedLatitude?.toFixed(6)}, {watchedLongitude?.toFixed(6)}
           </Popup>
         </Marker>
       </MapContainer>

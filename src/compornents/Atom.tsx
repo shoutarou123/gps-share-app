@@ -27,15 +27,15 @@ export const watchedLatitudeAtom = atom<number | null>(null);
 export const watchedLongitudeAtom = atom<number | null>(null);
 
 // 現在地に戻るボタン 手動操作用atom
-export const manualLatitudeAtom = atom<number | null>(null);
-export const manualLongitudeAtom = atom<number | null>(null);
+// export const manualLatitudeAtom = atom<number | null>(null);
+// export const manualLongitudeAtom = atom<number | null>(null);
 
 
 // 優先順位付きatom 手動が優先 次に監視用watch
-export const rankLatitudeAtom = atom<number | null>((get) => {
-  return get(manualLatitudeAtom) ?? get(watchedLatitudeAtom);
-});
+// export const rankLatitudeAtom = atom<number | null>((get) => {
+  // return get(manualLatitudeAtom) ?? get(watchedLatitudeAtom);
+// });
 
-export const rankLongitudeAtom = atom<number | null>((get) => {
-  return get(manualLongitudeAtom) ?? get(watchedLongitudeAtom);
-});
+// export const rankLongitudeAtom = atom<number | null>((get) => {
+  // return get(manualLongitudeAtom) ?? get(watchedLongitudeAtom);
+// });
