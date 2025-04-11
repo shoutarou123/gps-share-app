@@ -9,6 +9,29 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      post_locations: {
+        Row: {
+          location: unknown
+          post_id: number
+        }
+        Insert: {
+          location: unknown
+          post_id: number
+        }
+        Update: {
+          location?: unknown
+          post_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_locations_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: true
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       posts: {
         Row: {
           content: string | null

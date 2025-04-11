@@ -5,6 +5,7 @@ import { postAtom, postContentAtom, postTitleAtom, previewImgAtom, previewMovieA
 import { Post } from '../domain/post'
 import { supabase } from '../../utils/supabase'
 import { useNavigate } from 'react-router'
+import { PosAnimation } from 'leaflet'
 
 export const PostRegister = () => {
   const { handleFiles, imageContainerRef } = useHooks();
@@ -18,6 +19,9 @@ export const PostRegister = () => {
 
   const [post, setPost] = useAtom<Post[]>(postAtom);
 
+  const [lat, setLat] = useState<number | null>(null);
+  const [lon, setLon] = useState<number | null>(null);
+
   const navigate = useNavigate();
 
   // ｱｲﾏｳﾝﾄ時またはimgが変更された場合に実施
@@ -30,6 +34,7 @@ export const PostRegister = () => {
 
   // ﾌｧｲﾙ選択時の処理
   const handleFileChange: ChangeEventHandler<HTMLInputElement> = (e: React.ChangeEvent<HTMLInputElement>) => {
+
     if (e.target.files) {
       setUploadImg(e.target.files[0]); // File {name: '68D15BCE-75E7-48FF-A211-9FB44F70F551.jpg', lastModified: 1743412391308, lastModifiedDate: Mon Mar 31 2025 18:13:11 GMT+0900 (日本標準時), webkitRelativePath: '', size: 1465902, …}
       setPreviewImg(window.URL.createObjectURL(e.target.files[0])); // blob:http://localhost:5173/b891c190-bb8b-488b-a143-0504fe503fe2
@@ -48,9 +53,36 @@ export const PostRegister = () => {
   //   }
   // }
 
+  const getLocation = (): Promise<GeolocationPosition> => {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        position => resolve(position),
+        error => reject(error),
+        { enableHighAccuracy: true }
+      );
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+    console.log('authDataの値', authData);
+    console.log('authErrorの値',authError);
+
+    if (authError) throw authError;
+
+    if(!authData) {
+      alert('ログインが必要です');
+      return;
+    }
+
+      // 座標取得成功
+      const position = await getLocation();
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
       if (!uploadImg) {
         alert('画像を選択してください');
         return;
@@ -69,7 +101,7 @@ export const PostRegister = () => {
       const imageUrl = getPublicResult.data.publicUrl;
 
       // ﾃﾞｰﾀﾍﾞｰｽへ挿入
-      const dataBaseInsertResult = await supabase.from('posts').insert([
+      const { data: postData, error: postError } = await supabase.from('posts').insert([
         {
           title: newTitle,
           content: newContent,
@@ -77,13 +109,20 @@ export const PostRegister = () => {
           movie_url: previeMovie
         }
       ])
-      .select(); // 挿入ﾃﾞｰﾀを取得 postを更新するために必要
+        .select(); // 挿入ﾃﾞｰﾀを取得 postを更新するために必要
+        if (postError) throw postError;
 
-      if (dataBaseInsertResult.error) throw dataBaseInsertResult.error;
+      // ﾃﾞｰﾀﾍﾞｰｽへ座標を挿入
+      const { data, error: gisError } = await supabase.schema('public').from('post_locations').insert({
+        post_id: postData[0].id,
+        location: `POINT(${longitude} ${latitude})`
+      });
+      console.log('data', data);
+      if (gisError) throw gisError;
 
       // ローカル状態更新
       setPost((prevPost) => {
-        return [...prevPost, { id: dataBaseInsertResult.data[0].id, title: newTitle, content: newContent, image_url: imageUrl, movie_url: previeMovie }]
+        return [...prevPost, { id: postData[0].id, title: newTitle, content: newContent, image_url: imageUrl, movie_url: previeMovie }]
       })
 
       // ﾌｧｲﾙ入力ﾘｾｯﾄ
@@ -149,12 +188,12 @@ export const PostRegister = () => {
           送信
         </button>
       </form>
-        <button
-          className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
-          onClick={() => navigate("/posts")}
-        >
-          投稿一覧へ
-        </button>
+      <button
+        className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
+        onClick={() => navigate("/posts")}
+      >
+        投稿一覧へ
+      </button>
     </div>
   )
 }

@@ -22,7 +22,7 @@ export const GeolocationFetchButton = () => {
 
   // 緯度経度取得失敗関数
   const latitudeLongitudeErrorCallback = (error: GeolocationPositionError) => {
-    alert('位置情報を取得できませんでした');
+    console.log('位置情報を取得できませんでした');
   };
 
 
