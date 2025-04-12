@@ -6,3 +6,5 @@ export const supabase = createClient<Database>(
   process.env.VITE_SUPABASE_URL!,
   process.env.VITE_SUPABASE_ANON_KEY!
 );
+
+export const supabaseUrl = process.env.VITE_SUPABASE_URL
