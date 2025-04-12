@@ -49,9 +49,14 @@ export const Posts = () => {
     <div>
       {loading ? <p>Loading...</p> :
         <>
-          <h1>投稿一覧</h1>
+        <div className='flex flex-col items-center'>
 
-          <table>
+          <h1 className='text-center text-2xl font-bold m-6'>投稿一覧</h1>
+
+<div className='overflow-x-auto w-200'>
+
+
+          <table className='w-full'>
             <tbody>
               <tr className='border'>
                 <th className='border'>タイトル</th>
@@ -83,10 +88,18 @@ export const Posts = () => {
               })}
             </tbody>
           </table>
+          </div>
           <button
-            className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
+            className='bg-gray-50 border border-gray-300 rounded-lg p-2.5 mt-5'
             onClick={() => navigate('/post/register')}
           >投稿登録へ</button>
+          <button
+          className='bg-gray-50 border border-gray-300 rounded-lg p-2.5 mt-5'
+          onClick={() => navigate('/')}
+          >
+            homeへ
+          </button>
+          </div>
         </>
       }
     </div>

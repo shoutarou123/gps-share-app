@@ -155,21 +155,21 @@ export const PostRegister = () => {
       <form onSubmit={handleSubmit}>
         <label className='text-xl'>タイトル</label>
         <input
-          className='bg-gray-50 border border-gray-300 rounded-lg flex p-2.5'
+          className='w-90 mt-2 mb-2 bg-gray-50 border border-gray-300 rounded-lg flex p-2.5'
           type='text'
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
         />
         <label className='text-xl'>内容</label>
         <textarea
-          className='border flex'
+          className='w-90 mt-2 mb-2 bg-gray-50 border border-gray-300 rounded-lg flex'
           value={newContent ?? ''}
           onChange={(e) => setNewContent(e.target.value)}
         />
         <label className='text-xl'>画像</label>
         <input
           ref={fileInputRef}
-          className='flex border'
+          className='w-90 mt-2 p-2 bg-gray-50 border border-gray-300 rounded-lg flex '
           type='file'
           accept='image/*'
           onChange={handleFileChange}
@@ -182,18 +182,26 @@ export const PostRegister = () => {
             src={previewImg}
           />
         )}
+        <div className='flex flex-col mt-5'>
         <button
           className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
           type='submit'
         >
           送信
         </button>
+      </div>
       </form>
       <button
         className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
         onClick={() => navigate("/posts")}
       >
         投稿一覧へ
+      </button>
+      <button
+        className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
+        onClick={() => navigate("/")}
+      >
+        Homeへ
       </button>
     </div>
   )
