@@ -184,7 +184,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_all_post_coordinates: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          post_id: number
+          latitude: number
+          longitude: number
+        }[]
+      }
+      get_post_coordinates: {
+        Args: { input_post_id: number }
+        Returns: {
+          post_id: number
+          longitude: number
+          latitude: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

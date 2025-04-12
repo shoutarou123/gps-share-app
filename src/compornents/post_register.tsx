@@ -116,7 +116,7 @@ export const PostRegister = () => {
       // ﾃﾞｰﾀﾍﾞｰｽへ座標を挿入
       const { data, error: gisError } = await supabase.schema('public').from('post_locations').insert({
         post_id: postData[0].id,
-        location: `POINT(${longitude} ${latitude})`
+        location: `SRID=4326;POINT(${longitude} ${latitude})`
       });
       console.log('data', data);
       if (gisError) throw gisError;

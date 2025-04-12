@@ -5,7 +5,7 @@ import markerShadow from '../../node_modules/leaflet/dist/images/marker-shadow.p
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import '../../node_modules/leaflet/dist/leaflet.css'; // 追加
 import { useAtom, useAtomValue } from 'jotai';
-import { latitudeAtom, longitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
+import { latitudeAtom, locationAtom, longitudeAtom, PostLocation, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 import { CenterMapButton } from './CenterMapButton';
 import { ToHomeButton } from './ToHomeButton';
 // import { AutoFlyTo } from './AutoFlyTo';
@@ -13,6 +13,8 @@ import { CurrentCoordinate } from './CurrentCoordinate';
 
 import { useGeoWatcher } from './useGeoWatcher';
 import { useEffect } from 'react';
+import { supabase } from '../../utils/supabase';
+import { data } from 'react-router';
 
 const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
   iconUrl: markerIcon, // iconとして表示する画像のURL
@@ -29,9 +31,27 @@ export const MapPage = () => {
   useGeoWatcher();
   const latitude = useAtomValue(latitudeAtom);
   const longitude = useAtomValue(longitudeAtom);
-  const [ watchedLatitude , setWatchedLatitude ] = useAtom(watchedLatitudeAtom);
-  const [ watchedLongitude , setWatchedLongitude ] = useAtom(watchedLongitudeAtom);
+  const [watchedLatitude, setWatchedLatitude] = useAtom(watchedLatitudeAtom);
+  const [watchedLongitude, setWatchedLongitude] = useAtom(watchedLongitudeAtom);
+  const [locationData, setlocationData] = useAtom(locationAtom);
+  // const [postsLonData, setPostsLonData] = useAtom(postsLonAtom);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data, error } = await supabase
+          .rpc('get_all_post_coordinates')
+        if (error) throw error;
+
+        if (data) setlocationData(data as PostLocation[]);
+
+      } catch (error) {
+        console.error('データ取得失敗', error);
+      }
+    };
+    fetchData();
+  }, []);
+  // console.log('postsData',postsData);
   // 位置管理ロジック
   // useEffect(() => {
   //   const watchId = navigator.geolocation.watchPosition((position) => {
@@ -57,16 +77,22 @@ export const MapPage = () => {
         scrollWheelZoom={true} // scrollでzoom可
         zoomSnap={0.5} // zoomの段階調整
         style={{ height: '100vh', width: '100vw' }} // 追加
-        >
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-          <CurrentCoordinate /> {/* 座標表示 */}
-          <CenterMapButton /> {/* 現在地に移動ボタン */}
-          <ToHomeButton />
-          {/* <AutoFlyTo/> */}
-          {/* 追従 */}
+        <CurrentCoordinate /> {/* 座標表示 */}
+        <CenterMapButton /> {/* 現在地に移動ボタン */}
+        <ToHomeButton />
+        {/* <AutoFlyTo/> */}
+        {/* 追従 */}
+        {locationData?.map((location) => {
+          return (<Marker
+            key={location.post_id}
+            position={[location.latitude, location.longitude]}
+          ></Marker>)
+        })}
         <Marker
           key={`${watchedLatitude}-${watchedLongitude}`}
           position={
@@ -74,7 +100,7 @@ export const MapPage = () => {
           }
         >
           <Popup>
-           現在地： <br /> {watchedLatitude?.toFixed(6)}, {watchedLongitude?.toFixed(6)}
+            現在地： <br /> {watchedLatitude?.toFixed(6)}, {watchedLongitude?.toFixed(6)}
           </Popup>
         </Marker>
       </MapContainer>

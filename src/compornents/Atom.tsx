@@ -39,3 +39,14 @@ export const watchedLongitudeAtom = atom<number | null>(null);
 // export const rankLongitudeAtom = atom<number | null>((get) => {
   // return get(manualLongitudeAtom) ?? get(watchedLongitudeAtom);
 // });
+
+export type PostLocation = {
+  post_id: number;
+  latitude: number;
+  longitude: number;
+};
+// mapで表示する投稿データ管理用atom
+export const locationAtom = atom<PostLocation[]>([]);
+
+// export const postsLatAtom = atom<number | null>(null);
+// export const postsLonAtom = atom<number | null>(null);
