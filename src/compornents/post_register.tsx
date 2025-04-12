@@ -5,6 +5,7 @@ import { postAtom, postContentAtom, postTitleAtom, previewImgAtom, previewMovieA
 import { Post } from '../domain/post'
 import { supabase } from '../../utils/supabase'
 import { useNavigate } from 'react-router'
+import { PosAnimation } from 'leaflet'
 
 export const PostRegister = () => {
   const { handleFiles, imageContainerRef } = useHooks();
@@ -18,6 +19,9 @@ export const PostRegister = () => {
 
   const [post, setPost] = useAtom<Post[]>(postAtom);
 
+  const [lat, setLat] = useState<number | null>(null);
+  const [lon, setLon] = useState<number | null>(null);
+
   const navigate = useNavigate();
 
   // ｱｲﾏｳﾝﾄ時またはimgが変更された場合に実施
@@ -30,6 +34,7 @@ export const PostRegister = () => {
 
   // ﾌｧｲﾙ選択時の処理
   const handleFileChange: ChangeEventHandler<HTMLInputElement> = (e: React.ChangeEvent<HTMLInputElement>) => {
+
     if (e.target.files) {
       setUploadImg(e.target.files[0]); // File {name: '68D15BCE-75E7-48FF-A211-9FB44F70F551.jpg', lastModified: 1743412391308, lastModifiedDate: Mon Mar 31 2025 18:13:11 GMT+0900 (日本標準時), webkitRelativePath: '', size: 1465902, …}
       setPreviewImg(window.URL.createObjectURL(e.target.files[0])); // blob:http://localhost:5173/b891c190-bb8b-488b-a143-0504fe503fe2
@@ -48,42 +53,77 @@ export const PostRegister = () => {
   //   }
   // }
 
+  const getLocation = (): Promise<GeolocationPosition> => {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        position => resolve(position),
+        error => reject(error),
+        { enableHighAccuracy: true }
+      );
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      if (!uploadImg) {
-        alert('画像を選択してください');
+
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      console.log('authDataの値', authData);
+      console.log('authErrorの値', authError);
+
+      if (authError) throw authError;
+
+      if (!authData) {
+        alert('ログインが必要です');
         return;
       }
 
-      // 一意なﾌｧｲﾙとすため日付と名前をのちに渡す準備
-      const uploadFile = `${Date.now()}-${uploadImg.name}` // 1743659642286-68D15BCE-75E7-48FF-A211-9FB44F70F551.jpg
-      const uploadResult = await supabase.storage.from('post-images').upload(uploadFile, uploadImg); // data: {path: '1743660191468-68D15BCE-75E7-48FF-A211-9FB44F70F551.jpg', id: 'e26384d9-a7ef-4972-8320-ec0d0662ebc5', fullPath: 'post-images/1743660191468-68D15BCE-75E7-48FF-A211-9FB44F70F551.jpg'} error: null
-      if (uploadResult.error) {
-        throw uploadResult.error;
+      // 座標取得成功
+      const position = await getLocation();
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      let imagePath = null;
+
+      if (uploadImg) {
+        // 一意なﾌｧｲﾙとすため日付と名前をのちに渡す準備
+        const uploadFile = `${Date.now()}-${uploadImg.name}` // 1743659642286-68D15BCE-75E7-48FF-A211-9FB44F70F551.jpg
+        const uploadResult = await supabase.storage.from('post-images').upload(uploadFile, uploadImg); // data: {path: '1743660191468-68D15BCE-75E7-48FF-A211-9FB44F70F551.jpg', id: 'e26384d9-a7ef-4972-8320-ec0d0662ebc5', fullPath: 'post-images/1743660191468-68D15BCE-75E7-48FF-A211-9FB44F70F551.jpg'} error: null
+        if (uploadResult.error) {
+          throw uploadResult.error;
+        }
+        imagePath = uploadResult.data.path;
+        // 公開用URL取得 ｱﾌﾟﾘｹｰｼｮﾝ内で利用するために必要 Supabase Storageに保存されたファイルの公開URLを取得している
+        // urlData オブジェクトの中に 沢山ﾌﾟﾛﾊﾟﾃｨがあり、そのうちpublicUrlというﾌﾟﾛﾊﾟﾃｨも含まれている。
+        const getPublicResult = supabase.storage.from('post-images').getPublicUrl(uploadResult.data.path); // data: publicUrl: "https://[project-id].supabase.co/storage/v1/object/public/post-images/1743660353453-68D15BCE-75E7-48FF-A211-9FB44F70F551.jpg"
+        const imageUrl = getPublicResult.data.publicUrl;
+        console.log('getPublicResultの値', getPublicResult);
+        console.log('imageUrlの値', imageUrl);
       }
 
-      // 公開用URL取得 ｱﾌﾟﾘｹｰｼｮﾝ内で利用するために必要 Supabase Storageに保存されたファイルの公開URLを取得している
-      // urlData オブジェクトの中に 沢山ﾌﾟﾛﾊﾟﾃｨがあり、そのうちpublicUrlというﾌﾟﾛﾊﾟﾃｨも含まれている。
-      const getPublicResult = supabase.storage.from('post-images').getPublicUrl(uploadResult.data.path); // data: publicUrl: "https://vsxyeuqkhyjcmduveczr.supabase.co/storage/v1/object/public/post-images/1743660353453-68D15BCE-75E7-48FF-A211-9FB44F70F551.jpg"
-      const imageUrl = getPublicResult.data.publicUrl;
-
       // ﾃﾞｰﾀﾍﾞｰｽへ挿入
-      const dataBaseInsertResult = await supabase.from('posts').insert([
+      const { data: postData, error: postError } = await supabase.from('posts').insert([
         {
           title: newTitle,
           content: newContent,
-          image_url: imageUrl, // 公開URL形式でﾃﾞｰﾀﾍﾞｰｽへ保存
+          image_url: imagePath, // ﾌｧｲﾙ名形式でﾃﾞｰﾀﾍﾞｰｽへ保存
           movie_url: previeMovie
         }
       ])
-      .select(); // 挿入ﾃﾞｰﾀを取得 postを更新するために必要
+        .select(); // 挿入ﾃﾞｰﾀを取得 postを更新するために必要
+      if (postError) throw postError;
 
-      if (dataBaseInsertResult.error) throw dataBaseInsertResult.error;
+      // ﾃﾞｰﾀﾍﾞｰｽへ座標を挿入
+      const { data, error: gisError } = await supabase.schema('public').from('post_locations').insert({
+        post_id: postData[0].id,
+        location: `POINT(${longitude} ${latitude})`
+      });
+      console.log('data', data);
+      if (gisError) throw gisError;
 
       // ローカル状態更新
       setPost((prevPost) => {
-        return [...prevPost, { id: dataBaseInsertResult.data[0].id, title: newTitle, content: newContent, image_url: imageUrl, movie_url: previeMovie }]
+        return [...prevPost, { id: postData[0].id, title: newTitle, content: newContent, image_url: imagePath, movie_url: previeMovie }]
       })
 
       // ﾌｧｲﾙ入力ﾘｾｯﾄ
@@ -115,21 +155,21 @@ export const PostRegister = () => {
       <form onSubmit={handleSubmit}>
         <label className='text-xl'>タイトル</label>
         <input
-          className='bg-gray-50 border border-gray-300 rounded-lg flex p-2.5'
+          className='w-90 mt-2 mb-2 bg-gray-50 border border-gray-300 rounded-lg flex p-2.5'
           type='text'
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
         />
         <label className='text-xl'>内容</label>
         <textarea
-          className='border flex'
+          className='w-90 mt-2 mb-2 bg-gray-50 border border-gray-300 rounded-lg flex'
           value={newContent ?? ''}
           onChange={(e) => setNewContent(e.target.value)}
         />
         <label className='text-xl'>画像</label>
         <input
           ref={fileInputRef}
-          className='flex border'
+          className='w-90 mt-2 p-2 bg-gray-50 border border-gray-300 rounded-lg flex '
           type='file'
           accept='image/*'
           onChange={handleFileChange}
@@ -142,19 +182,27 @@ export const PostRegister = () => {
             src={previewImg}
           />
         )}
+        <div className='flex flex-col mt-5'>
         <button
           className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
           type='submit'
         >
           送信
         </button>
+      </div>
       </form>
-        <button
-          className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
-          onClick={() => navigate("/posts")}
-        >
-          投稿一覧へ
-        </button>
+      <button
+        className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
+        onClick={() => navigate("/posts")}
+      >
+        投稿一覧へ
+      </button>
+      <button
+        className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
+        onClick={() => navigate("/")}
+      >
+        Homeへ
+      </button>
     </div>
   )
 }

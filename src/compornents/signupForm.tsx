@@ -175,6 +175,12 @@ const handleClick = () => {
         >登録</button>
 
         <a className='hover:underline cursor-pointer hover:text-blue-600 text-center' onClick={handleClick}>アカウントを持っている場合</a>
+        <button
+        className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
+        onClick={() => navigate("/")}
+      >
+        Homeへ
+      </button>
         </div>
       </form>
 

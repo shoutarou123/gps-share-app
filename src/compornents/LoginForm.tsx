@@ -67,6 +67,12 @@ export default function LoginForm() {
               ログイン
             </button>
             <a className='text-center hover:underline cursor-pointer hover:text-blue-600' onClick={handleClick}>パスワードを忘れた</a>
+            <button
+              className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
+              onClick={() => navigate("/")}
+            >
+              Homeへ
+            </button>
           </div>
         </form>
       </div>

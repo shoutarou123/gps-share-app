@@ -6,9 +6,9 @@ export default function Home() {
   const navigate = useNavigate();
   return (
     <>
-      <h1>位置情報管理システム</h1>
+      <h1 className='text-2xl font-bold m-6 text-center'>位置情報管理システム</h1>
       <div
-      className='flex flex-col space-y-10'
+      className='flex flex-col space-y-10 w-100 m-auto'
       >
 
         <GeolocationFetchButton />
