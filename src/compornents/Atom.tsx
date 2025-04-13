@@ -33,11 +33,11 @@ export const watchedLongitudeAtom = atom<number | null>(null);
 
 // 優先順位付きatom 手動が優先 次に監視用watch
 // export const rankLatitudeAtom = atom<number | null>((get) => {
-  // return get(manualLatitudeAtom) ?? get(watchedLatitudeAtom);
+// return get(manualLatitudeAtom) ?? get(watchedLatitudeAtom);
 // });
 
 // export const rankLongitudeAtom = atom<number | null>((get) => {
-  // return get(manualLongitudeAtom) ?? get(watchedLongitudeAtom);
+// return get(manualLongitudeAtom) ?? get(watchedLongitudeAtom);
 // });
 
 export type PostLocation = {
@@ -50,3 +50,12 @@ export const locationAtom = atom<PostLocation[]>([]);
 
 // export const postsLatAtom = atom<number | null>(null);
 // export const postsLonAtom = atom<number | null>(null);
+
+export type mergePostData = {
+  title: string | undefined;
+  post_id: number;
+  latitude: number;
+  longitude: number;
+};
+
+export const mergePostDataAtom = atom<mergePostData[]>([]);

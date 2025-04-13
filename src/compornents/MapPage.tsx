@@ -5,16 +5,17 @@ import markerShadow from '../../node_modules/leaflet/dist/images/marker-shadow.p
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import '../../node_modules/leaflet/dist/leaflet.css'; // 追加
 import { useAtom, useAtomValue } from 'jotai';
-import { latitudeAtom, locationAtom, longitudeAtom, PostLocation, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
+import { latitudeAtom, locationAtom, longitudeAtom, mergePostDataAtom, PostLocation, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 import { CenterMapButton } from './CenterMapButton';
 import { ToHomeButton } from './ToHomeButton';
 // import { AutoFlyTo } from './AutoFlyTo';
 import { CurrentCoordinate } from './CurrentCoordinate';
 
 import { useGeoWatcher } from './useGeoWatcher';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../../utils/supabase';
 import { data } from 'react-router';
+import { Posts } from './posts';
 
 const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
   iconUrl: markerIcon, // iconとして表示する画像のURL
@@ -34,16 +35,30 @@ export const MapPage = () => {
   const [watchedLatitude, setWatchedLatitude] = useAtom(watchedLatitudeAtom);
   const [watchedLongitude, setWatchedLongitude] = useAtom(watchedLongitudeAtom);
   const [locationData, setlocationData] = useAtom(locationAtom);
-  // const [postsLonData, setPostsLonData] = useAtom(postsLonAtom);
+  const [mergePostData, setMergePostData] = useAtom(mergePostDataAtom);
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data, error } = await supabase
+        const { data: coordinateData, error } = await supabase
           .rpc('get_all_post_coordinates')
         if (error) throw error;
+        if (coordinateData) setlocationData(coordinateData as PostLocation[]);
 
-        if (data) setlocationData(data as PostLocation[]);
+        const {data: fetchPosts, error: errorPosts} = await supabase.from('posts').select("*");
+        console.log('fetchPostsの値', fetchPosts);
+        if (coordinateData && fetchPosts) {
+          const postsIdMergeLocIdData = coordinateData.map((coordiData) => {
+            const post = fetchPosts?.find(posts => posts.id === coordiData.post_id)
+            return {
+              ...coordiData,
+              title: post?.title
+            }
+          });
+          console.log('postsIdMergeLocIdDataの値', postsIdMergeLocIdData);
+          setMergePostData(postsIdMergeLocIdData);
+        }
 
       } catch (error) {
         console.error('データ取得失敗', error);
@@ -87,11 +102,15 @@ export const MapPage = () => {
         <ToHomeButton />
         {/* <AutoFlyTo/> */}
         {/* 追従 */}
-        {locationData?.map((location) => {
+        {mergePostData?.map((mergePost) => {
           return (<Marker
-            key={location.post_id}
-            position={[location.latitude, location.longitude]}
-          ></Marker>)
+            key={mergePost.post_id}
+            position={[mergePost.latitude, mergePost.longitude]}
+          >
+            <Popup>
+              {mergePost.title}
+            </Popup>
+          </Marker>)
         })}
         <Marker
           key={`${watchedLatitude}-${watchedLongitude}`}
