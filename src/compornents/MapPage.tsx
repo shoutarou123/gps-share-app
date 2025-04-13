@@ -17,16 +17,14 @@ import { supabase, supabaseUrl } from '../../utils/supabase';
 import { data } from 'react-router';
 import { Posts } from './posts';
 
-const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
-  iconUrl: markerIcon, // iconとして表示する画像のURL
+const greenIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
+  iconUrl: '/leaflet/pngwing.com.png', // iconとして表示する画像のURL
   shadowUrl: markerShadow, // ﾏｰｶｰに影を表示する場合その影のURL
-  iconSize: [25, 41], // ｱｲｺﾝ画像の幅と高さﾋﾟｸｾﾙ単位
+  iconSize: [50, 41], // ｱｲｺﾝ画像の幅と高さﾋﾟｸｾﾙ単位
   iconAnchor: [12, 41], // ｱｲｺﾝ画像のどの点が地図上の座標と一致するか ﾋﾟｸｾﾙ単位
-  popupAnchor: [1, -34], // ﾎﾟｯﾌﾟｱｯﾌﾟｳｨﾝﾄﾞｳがｱｲｺﾝ画像からどのくらい離れるか
-  shadowSize: [41, 41] // 影画像の幅と高さ
+  popupAnchor: [1, -40], // ﾎﾟｯﾌﾟｱｯﾌﾟｳｨﾝﾄﾞｳがｱｲｺﾝ画像からどのくらい離れるか
+  shadowSize: [41, 41], // 影画像の幅と高さ
 });
-
-L.Marker.prototype.options.icon = DefaultIcon;
 
 export const MapPage = () => {
   useGeoWatcher();
@@ -108,6 +106,7 @@ export const MapPage = () => {
           return (<Marker
             key={mergePost.post_id}
             position={[mergePost.latitude, mergePost.longitude]}
+            icon={greenIcon}
           >
             <Popup>
               <div className='mb-2'>
