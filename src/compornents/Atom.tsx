@@ -53,6 +53,7 @@ export const locationAtom = atom<PostLocation[]>([]);
 
 export type mergePostData = {
   title: string | undefined;
+  image_url: string | null,
   post_id: number;
   latitude: number;
   longitude: number;

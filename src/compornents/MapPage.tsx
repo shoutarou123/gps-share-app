@@ -13,7 +13,7 @@ import { CurrentCoordinate } from './CurrentCoordinate';
 
 import { useGeoWatcher } from './useGeoWatcher';
 import { useEffect, useState } from 'react';
-import { supabase } from '../../utils/supabase';
+import { supabase, supabaseUrl } from '../../utils/supabase';
 import { data } from 'react-router';
 import { Posts } from './posts';
 
@@ -37,6 +37,7 @@ export const MapPage = () => {
   const [locationData, setlocationData] = useAtom(locationAtom);
   const [mergePostData, setMergePostData] = useAtom(mergePostDataAtom);
 
+  const SUPABASE_STORAGE_URL = `${supabaseUrl}/storage/v1/object/public/post-images`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,14 +47,15 @@ export const MapPage = () => {
         if (error) throw error;
         if (coordinateData) setlocationData(coordinateData as PostLocation[]);
 
-        const {data: fetchPosts, error: errorPosts} = await supabase.from('posts').select("*");
+        const { data: fetchPosts, error: errorPosts } = await supabase.from('posts').select("*");
         console.log('fetchPostsの値', fetchPosts);
         if (coordinateData && fetchPosts) {
           const postsIdMergeLocIdData = coordinateData.map((coordiData) => {
             const post = fetchPosts?.find(posts => posts.id === coordiData.post_id)
             return {
               ...coordiData,
-              title: post?.title
+              title: post?.title,
+              image_url: `${SUPABASE_STORAGE_URL}/${post?.image_url}`
             }
           });
           console.log('postsIdMergeLocIdDataの値', postsIdMergeLocIdData);
@@ -108,7 +110,21 @@ export const MapPage = () => {
             position={[mergePost.latitude, mergePost.longitude]}
           >
             <Popup>
+              <div className='mb-2'>
               {mergePost.title}
+              </div>
+              {mergePost.image_url ?
+                <img
+                  src={mergePost.image_url ?? ''}
+                  alt={`${mergePost.title}の画像`}
+                  style={{
+                    width: '100px',
+                    height: '100px'
+                  }}
+                />
+                :
+                <span></span>
+              }
             </Popup>
           </Marker>)
         })}
