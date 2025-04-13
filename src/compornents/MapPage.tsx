@@ -26,6 +26,15 @@ const greenIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
   shadowSize: [41, 41], // 影画像の幅と高さ
 });
 
+const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
+  iconUrl: markerIcon, // iconとして表示する画像のURL
+  shadowUrl: markerShadow, // ﾏｰｶｰに影を表示する場合その影のURL
+  iconSize: [25, 41], // ｱｲｺﾝ画像の幅と高さﾋﾟｸｾﾙ単位
+  iconAnchor: [12, 41], // ｱｲｺﾝ画像のどの点が地図上の座標と一致するか ﾋﾟｸｾﾙ単位
+  popupAnchor: [1, -34], // ﾎﾟｯﾌﾟｱｯﾌﾟｳｨﾝﾄﾞｳがｱｲｺﾝ画像からどのくらい離れるか
+  shadowSize: [41, 41] // 影画像の幅と高さ
+});
+
 export const MapPage = () => {
   useGeoWatcher();
   const latitude = useAtomValue(latitudeAtom);
@@ -110,17 +119,16 @@ export const MapPage = () => {
           >
             <Popup>
               <div className='mb-2'>
-              {mergePost.title}
+                {mergePost.title}
               </div>
               {mergePost.image_url ?
-                <img
-                  src={mergePost.image_url ?? ''}
-                  alt={`${mergePost.title}の画像`}
-                  style={{
-                    width: '100px',
-                    height: '100px'
-                  }}
-                />
+                <div className='w-[300px]'>
+                  <img
+                    src={mergePost.image_url ?? ''}
+                    alt={`${mergePost.title}の画像`}
+                    className='w-full h-auto'
+                  />
+                </div>
                 :
                 <span></span>
               }
@@ -132,6 +140,7 @@ export const MapPage = () => {
           position={
             watchedLatitude && watchedLongitude ? [watchedLatitude, watchedLongitude] : [35.681641, 139.766921]
           }
+          icon={DefaultIcon}
         >
           <Popup>
             現在地： <br /> {watchedLatitude?.toFixed(6)}, {watchedLongitude?.toFixed(6)}
