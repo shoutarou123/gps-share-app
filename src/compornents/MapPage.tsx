@@ -75,6 +75,7 @@ export const MapPage = () => {
     };
     fetchData();
   }, []);
+
   // console.log('postsData',postsData);
   // 位置管理ロジック
   // useEffect(() => {
@@ -122,13 +123,25 @@ export const MapPage = () => {
                 {mergePost.title}
               </div>
               {mergePost.image_url ?
-                <div className='w-[300px]'>
-                  <img
-                    src={mergePost.image_url ?? ''}
-                    alt={`${mergePost.title}の画像`}
-                    className='w-full h-auto'
-                  />
-                </div>
+                <>
+                  <div className='w-[300px]'>
+                    <a
+                      href={mergePost.image_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                    >
+                      <img
+                        src={mergePost.image_url ?? ''}
+                        alt={`${mergePost.title}の画像`}
+                        className='w-full h-auto'
+                      />
+                    </a>
+                  </div>
+                  <div className='flex justify-center mt-2'>
+
+                  </div>
+                </>
                 :
                 <span></span>
               }
