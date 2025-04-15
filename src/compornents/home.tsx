@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { GeolocationFetchButton } from './GeolocationFetchButton';
 
+
 export default function Home() {
   const navigate = useNavigate();
+
   return (
     <>
       <h1 className='text-2xl font-bold m-6 text-center'>位置情報管理システム</h1>

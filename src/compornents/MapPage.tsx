@@ -76,22 +76,6 @@ export const MapPage = () => {
     fetchData();
   }, []);
 
-  // console.log('postsData',postsData);
-  // 位置管理ロジック
-  // useEffect(() => {
-  //   const watchId = navigator.geolocation.watchPosition((position) => {
-  //     console.log('watchのpositon値', position);
-  //     if (manualLatitude === null) {
-  //       setWatchedLatitude(position.coords.latitude);
-  //       setWatchedLongitude(position.coords.longitude);
-  //     }
-  //   },
-  //   (error) => console.error('watch位置情報取得エラー', error),
-  //   { enableHighAccuracy: true }
-  // );
-  // return () => navigator.geolocation.clearWatch(watchId);
-  // }, [manualLatitude]);
-
   return (
     <>
       <MapContainer

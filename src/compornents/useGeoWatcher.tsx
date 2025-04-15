@@ -1,7 +1,10 @@
-import React, { useEffect, useRef } from 'react'
-import { latitudeAtom, longitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
+
+import { useSetAtom } from 'jotai';
+import { watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
+import { supabase } from '../../utils/supabase';
+import { GetUserData } from '../../lib/authUser';
 
 
 export const useGeoWatcher = () => {
@@ -9,33 +12,55 @@ export const useGeoWatcher = () => {
   const setWatchedLongitude = useSetAtom(watchedLongitudeAtom);
   const watchIdRef = useRef<number | null>(null);
 
-  const WatchSuccessCallback = (position: GeolocationPosition) => {
-    console.log(`更新：緯度=${position.coords.latitude}, 経度=${position.coords.longitude}`);
-    setWatchedLatitude(position.coords.latitude);
-    setWatchedLongitude(position.coords.longitude);
-  }
-
-  const WatchErrorCallback = (error: GeolocationPositionError) => {
-    console.error('位置情報監視エラー',error.message);
-    toast.error(`位置情報監視に失敗しました：${error.message}`);
-  }
-
   useEffect(() => {
+
+    // 位置情報取得関数
+    const WatchSuccessCallback = async (position: GeolocationPosition) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      console.log(`更新：緯度=${position.coords.latitude}, 経度=${position.coords.longitude}`);
+
+      setWatchedLatitude(latitude);
+      setWatchedLongitude(longitude);
+
+      const userId = await GetUserData();
+      console.log('userIdの値', userId);
+
+      // users_locationﾃｰﾌﾞﾙに位置情報挿入
+      if (userId) {
+        const { error } = await supabase.from('users_location').upsert({
+          id: userId,
+          location: `SRID=4326;POINT(${longitude} ${latitude})`,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'id' })
+        if (error) {
+          console.error('位置情報保存エラー', error.message)
+          toast.error('位置情報の保存に失敗しました');
+        }
+      }
+    }
+
+    // 位置情報取得エラー関数
+    const WatchErrorCallback = (error: GeolocationPositionError) => {
+      console.error('位置情報監視エラー', error.message);
+      toast.error(`位置情報監視に失敗しました：${error.message}`);
+    }
+
+    // 位置情報監視スタート navigator.geolocation.watchPosition()で自動的にpositionが渡される
     watchIdRef.current = navigator.geolocation.watchPosition(
-      WatchSuccessCallback,
+      WatchSuccessCallback, // ←ここにpositionが渡される
       WatchErrorCallback,
       {
         enableHighAccuracy: true,
         maximumAge: 0
       }
-    )
+    );
+
+    // アイマウント時に監視解除
     return () => {
       if (watchIdRef.current !== null) {
         navigator.geolocation.clearWatch(watchIdRef.current);
       }
     };
-  },[]);
-
-  return null;
+  }, []);
 }
-
