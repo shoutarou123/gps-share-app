@@ -179,6 +179,24 @@ export type Database = {
         }
         Relationships: []
       }
+      users_location: {
+        Row: {
+          id: string
+          location: unknown | null
+          updated_at: string | null
+        }
+        Insert: {
+          id: string
+          location?: unknown | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          location?: unknown | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -198,6 +216,14 @@ export type Database = {
           post_id: number
           longitude: number
           latitude: number
+        }[]
+      }
+      get_user_location_data: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          latitude: number
+          longitude: number
         }[]
       }
     }

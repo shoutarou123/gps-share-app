@@ -1,5 +1,5 @@
 import React, { ChangeEvent, ChangeEventHandler, useEffect, useRef, useState } from 'react'
-import { useHooks } from '../hooks'
+import { useHooks } from '../hooks/hooks'
 import { useAtom } from 'jotai'
 import { postAtom, postContentAtom, postTitleAtom, previewImgAtom, previewMovieAtom, uploadImageAtom, uploadMovieAtom } from './Atom'
 import { Post } from '../domain/post'

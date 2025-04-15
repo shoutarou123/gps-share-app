@@ -11,6 +11,7 @@ import { ToHomeButton } from './ToHomeButton';
 // import { AutoFlyTo } from './AutoFlyTo';
 import { CurrentCoordinate } from './CurrentCoordinate';
 
+import { useOtherUserLocations } from '../hooks/useOtherUserLocations';
 import { useGeoWatcher } from './useGeoWatcher';
 import { useEffect, useState } from 'react';
 import { supabase, supabaseUrl } from '../../utils/supabase';
@@ -26,6 +27,15 @@ const greenIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
   shadowSize: [41, 41], // 影画像の幅と高さ
 });
 
+const otherIcon = L.icon({
+  iconUrl: '/leaflet/marker-256.png',
+  shadowUrl: markerShadow,
+  iconSize: [51, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -40],
+  shadowSize: [41, 41],
+})
+
 const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
   iconUrl: markerIcon, // iconとして表示する画像のURL
   shadowUrl: markerShadow, // ﾏｰｶｰに影を表示する場合その影のURL
@@ -37,6 +47,7 @@ const DefaultIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
 
 export const MapPage = () => {
   useGeoWatcher();
+  const otherUserLocations = useOtherUserLocations()
   const latitude = useAtomValue(latitudeAtom);
   const longitude = useAtomValue(longitudeAtom);
   const [watchedLatitude, setWatchedLatitude] = useAtom(watchedLatitudeAtom);
@@ -47,6 +58,7 @@ export const MapPage = () => {
   const SUPABASE_STORAGE_URL = `${supabaseUrl}/storage/v1/object/public/post-images`;
 
   useEffect(() => {
+
     const fetchData = async () => {
       try {
         const { data: coordinateData, error } = await supabase
@@ -74,23 +86,7 @@ export const MapPage = () => {
       }
     };
     fetchData();
-  }, []);
-
-  // console.log('postsData',postsData);
-  // 位置管理ロジック
-  // useEffect(() => {
-  //   const watchId = navigator.geolocation.watchPosition((position) => {
-  //     console.log('watchのpositon値', position);
-  //     if (manualLatitude === null) {
-  //       setWatchedLatitude(position.coords.latitude);
-  //       setWatchedLongitude(position.coords.longitude);
-  //     }
-  //   },
-  //   (error) => console.error('watch位置情報取得エラー', error),
-  //   { enableHighAccuracy: true }
-  // );
-  // return () => navigator.geolocation.clearWatch(watchId);
-  // }, [manualLatitude]);
+  }, [otherUserLocations]);
 
   return (
     <>
@@ -112,6 +108,8 @@ export const MapPage = () => {
         <ToHomeButton />
         {/* <AutoFlyTo/> */}
         {/* 追従 */}
+
+        {/* 投稿マーカー */}
         {mergePostData?.map((mergePost) => {
           return (<Marker
             key={mergePost.post_id}
@@ -148,6 +146,23 @@ export const MapPage = () => {
             </Popup>
           </Marker>)
         })}
+
+        {/* 他のユーザー用マーカー */}
+        {otherUserLocations.map((otherUser) => {
+          return (
+            <Marker
+              key={`${otherUser.id}`}
+              position={
+                [otherUser.latitude, otherUser.longitude]
+              }
+            icon={otherIcon}
+            >
+              <Popup></Popup>
+            </Marker>
+          )
+        })}
+
+        {/* ログインユーザー用マーカー */}
         <Marker
           key={`${watchedLatitude}-${watchedLongitude}`}
           position={

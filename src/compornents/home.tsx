@@ -1,14 +1,18 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { GeolocationFetchButton } from './GeolocationFetchButton';
+import { supabase } from '../../utils/supabase';
+import { GetUserData } from '../../lib/authUser';
+
 
 export default function Home() {
   const navigate = useNavigate();
+
   return (
     <>
       <h1 className='text-2xl font-bold m-6 text-center'>位置情報管理システム</h1>
       <div
-      className='flex flex-col space-y-10 w-100 m-auto'
+        className='flex flex-col space-y-10 w-100 m-auto'
       >
 
         <GeolocationFetchButton />
