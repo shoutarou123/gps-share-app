@@ -60,3 +60,13 @@ export type mergePostData = {
 };
 
 export const mergePostDataAtom = atom<mergePostData[]>([]);
+
+// 他のユーザーのusers_locationの中身保管用atom
+
+export type otherUserLocationData = {
+  id: string;
+  latitude: number;
+  longitude: number;
+}
+
+export const otherUserLocationAtom = atom<otherUserLocationData[]>([]);
