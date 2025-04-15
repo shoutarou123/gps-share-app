@@ -218,6 +218,14 @@ export type Database = {
           latitude: number
         }[]
       }
+      get_user_location_data: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          latitude: number
+          longitude: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
