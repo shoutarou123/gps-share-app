@@ -12,3 +12,18 @@ export async function GetAllUsers() : Promise<User[]>{ //User型のｵﾌﾞｼ�
   });
   return usersData;
 }
+
+// usersテーブルから自分のデータを取得
+export async function GetUser() :Promise<User>{
+  const { data: {user} } = await supabase.auth.getUser();
+  if (!user) throw new Error('ユーザーが認証されていません');
+
+  const { data, error } = await supabase
+  .from('users')
+  .select("*")
+  .eq('id', user.id)
+  .single();
+
+  if (error) throw new Error('データ取得エラー', { cause: error.message});
+  return data;
+}
