@@ -1,7 +1,7 @@
-import { atom, useAtom } from 'jotai';
-import { latitudeAtom, loadingAtom, longitudeAtom } from './Atom';
+import { useAtom } from 'jotai';
+import { latitudeAtom, longitudeAtom } from './Atom';
 import { useNavigate } from 'react-router';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 export const GeolocationFetchButton = () => {
   const navigate = useNavigate();

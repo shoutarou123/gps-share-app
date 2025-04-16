@@ -1,8 +1,5 @@
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { GeolocationFetchButton } from './GeolocationFetchButton';
-import { supabase } from '../../utils/supabase';
-import { GetUserData } from '../../lib/authUser';
 
 
 export default function Home() {
