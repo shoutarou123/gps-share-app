@@ -4,7 +4,8 @@ import { toast } from 'react-toastify'
 import { useSetAtom } from 'jotai';
 import { watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 import { supabase } from '../../utils/supabase';
-import { GetUserData } from '../../lib/authUser';
+import { GetUserDataId } from '../../lib/authUser';
+import { GetUser } from '../../lib/user';
 
 
 export const useGeoWatcher = () => {
@@ -23,13 +24,15 @@ export const useGeoWatcher = () => {
       setWatchedLatitude(latitude);
       setWatchedLongitude(longitude);
 
-      const userId = await GetUserData();
+      const userId = await GetUserDataId();
       console.log('userIdの値', userId);
+      const userData = await GetUser();
 
       // users_locationﾃｰﾌﾞﾙに位置情報挿入
       if (userId) {
         const { error } = await supabase.from('users_location').upsert({
           id: userId,
+          name: userData.name,
           location: `SRID=4326;POINT(${longitude} ${latitude})`,
           updated_at: new Date().toISOString()
         }, { onConflict: 'id' })

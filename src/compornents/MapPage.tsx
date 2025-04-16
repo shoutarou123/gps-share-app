@@ -148,7 +148,8 @@ export const MapPage = () => {
         })}
 
         {/* 他のユーザー用マーカー */}
-        {otherUserLocations.map((otherUser) => {
+        {otherUserLocations?.filter((user) => user.latitude !== null && user.longitude !== null)
+        .map((otherUser) => {
           return (
             <Marker
               key={`${otherUser.id}`}
@@ -157,7 +158,7 @@ export const MapPage = () => {
               }
             icon={otherIcon}
             >
-              <Popup></Popup>
+              <Popup>{otherUser.name}</Popup>
             </Marker>
           )
         })}
