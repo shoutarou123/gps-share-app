@@ -71,3 +71,6 @@ export type otherUserLocationData = {
 }
 
 export const otherUserLocationAtom = atom<otherUserLocationData[]>([]);
+
+// ログイン trure/false管理用
+export const loginAtom = atom(false);

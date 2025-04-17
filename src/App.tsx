@@ -15,7 +15,7 @@ import Personal from "./compornents/personal";
 import PersonalRegister from "./compornents/personalRegister";
 import { SignupForm } from "./compornents/signupForm";
 import LoginForm from "./compornents/LoginForm";
-import { SignOut } from "./compornents/SignOut";
+import { SignOutButton } from "./compornents/SignOutButton";
 import { ResetPasswordForm } from "./compornents/ResetPasswordForm";
 import { PasswordReset } from "./compornents/PasswordReset";
 import { MapPage } from "./compornents/MapPage";
@@ -53,7 +53,7 @@ function App() {
 
           <Route path="login" element={<LoginForm />} />
 
-          <Route path="logout" element={<SignOut />} />
+          <Route path="logout" element={<SignOutButton />} />
 
           <Route path="resetPasswordForm" element={<ResetPasswordForm />}/>
 

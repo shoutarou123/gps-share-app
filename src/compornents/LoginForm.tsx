@@ -2,6 +2,9 @@ import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router'
 import { supabase } from '../../utils/supabase';
+import { toast } from 'react-toastify';
+import { loginAtom } from './Atom';
+import { useAtom } from 'jotai';
 
 type Inputs = {
   email: string;
@@ -9,6 +12,7 @@ type Inputs = {
 }
 
 export default function LoginForm() {
+  const [login, setLogin] = useAtom(loginAtom);
   const navigate = useNavigate();
   const { register, handleSubmit, reset } = useForm<Inputs>({ defaultValues: { email: "", password: "" } });
 
@@ -23,7 +27,8 @@ export default function LoginForm() {
         throw new Error(error.message);
       }
       navigate("/"); // 成功したらrootに遷移
-      alert("ログインに成功しました");
+      setLogin(true);
+      toast.success("ログインに成功しました");
     } catch (err) {
       alert("ログインに失敗しました");
     } finally {

@@ -25,8 +25,6 @@ export const GeolocationFetchButton = () => {
     console.log('位置情報を取得できませんでした');
   };
 
-
-
   // 位置情報を取得
   const onClickFetchGeoLocation = () => {
     navigator.geolocation.getCurrentPosition(
@@ -36,56 +34,25 @@ export const GeolocationFetchButton = () => {
         enableHighAccuracy: true
       }
     );
-
-    // 位置情報監視を取得してuseRefに保存
-    //   watchIdRef.current = navigator.geolocation.watchPosition(
-    //     WatchSuccessCallback,
-    //     WatchErrorCallback,
-    //     {
-    //       enableHighAccuracy: true
-    //     }
-    //   )
-    // }
-
-    // 位置情報監視成功関数
-    // const WatchSuccessCallback = (position: GeolocationPosition) => {
-    //   alert(`更新：緯度=${position.coords.latitude}, 経度=${position.coords.longitude}`);
-    //   setLatitude(position.coords.latitude);
-    //   setLongitude(position.coords.longitude);
-    // }
-
-    // 位置情報監視失敗関数
-    // const WatchErrorCallback = (error: GeolocationPositionError) => {
-    //   console.log(error);
-    //   alert('位置情報監視に失敗しました');
-    // };
-
-
-    // 位置情報クリア関数
-    // const stopWatching = () => {
-    //   if (watchIdRef.current !== null) { // 位置情報が入っているときに
-    //     navigator.geolocation.clearWatch(watchIdRef.current); // 位置情報をクリアする
-    //     watchIdRef.current = null; // watchIdRef.currentの中身もnullにする
-    //   }
-    // };
-
-    // useEffect(() => {
-    //   return () => {
-    //     stopWatching(); // 本ｺﾎﾟｰﾈﾝﾄからｱｲﾏｳﾝﾄした場合に位置情報をｸﾘｱする関数が実行される
-    //   };
-    // }, []);
   }
   return (
     <>
       <button
-        className='py-1 px-5 bg-sky-500 rounded-2xl font-black border text-white'
+        className="
+        py-5
+        bg-teal-600
+        hover:bg-teal-700
+        focus:outline-none focus:ring-2 focus:ring-teal-500
+        rounded-2xl
+        font-black
+        border
+        text-white text-2xl
+        cursor-pointer
+        "
         onClick={onClickFetchGeoLocation}
-      >位置情報を取得後画面遷移</button>
-
-      {/* <button
-            className='py-1 px-5 bg-blue-500 rounded-2xl font-black border text-white cursor-pointer'
-              onClick={onClickWatch}
-            >位置情報監視ボタン</button> */}
+      >
+        Map
+      </button>
     </>
   )
 }
