@@ -65,6 +65,7 @@ export const mergePostDataAtom = atom<mergePostData[]>([]);
 
 export type otherUserLocationData = {
   id: string;
+  name: string;
   latitude: number;
   longitude: number;
 }

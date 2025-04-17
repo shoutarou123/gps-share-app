@@ -183,16 +183,19 @@ export type Database = {
         Row: {
           id: string
           location: unknown | null
+          name: string | null
           updated_at: string | null
         }
         Insert: {
           id: string
           location?: unknown | null
+          name?: string | null
           updated_at?: string | null
         }
         Update: {
           id?: string
           location?: unknown | null
+          name?: string | null
           updated_at?: string | null
         }
         Relationships: []
@@ -210,20 +213,21 @@ export type Database = {
           longitude: number
         }[]
       }
+      get_other_user_location_data: {
+        Args: { current_user_id: string }
+        Returns: {
+          id: string
+          name: string
+          latitude: number
+          longitude: number
+        }[]
+      }
       get_post_coordinates: {
         Args: { input_post_id: number }
         Returns: {
           post_id: number
           longitude: number
           latitude: number
-        }[]
-      }
-      get_user_location_data: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          id: string
-          latitude: number
-          longitude: number
         }[]
       }
     }

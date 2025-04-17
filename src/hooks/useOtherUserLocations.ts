@@ -1,29 +1,32 @@
 import { useEffect } from "react";
-import { GetUserData } from "../../lib/authUser";
+import { GetUserDataId } from "../../lib/authUser";
 import { supabase } from "../../utils/supabase";
 import { useAtom } from "jotai";
 import { otherUserLocationAtom } from "../compornents/Atom";
-
 
 export const useOtherUserLocations = () => {
 const [otherUserLocations, setOtherUserLocations] = useAtom(otherUserLocationAtom)
 
   useEffect(() => {
     const fetchOtherUserLocation = async (): Promise<any> => {
-      const currentUserId = await GetUserData();
+      const currentUserId = await GetUserDataId();
       if (currentUserId) {
         const { data, error } = await supabase
-          .rpc('get_user_location_data')
-
+          .rpc('get_other_user_location_data', {current_user_id: currentUserId})
         if (error) {
           console.error('エラー', error.message)
         } else {
-          const formattd = data.map((locationData) => ({
-            id: locationData.id,
-            longitude: locationData.longitude,
-            latitude: locationData.latitude
-          }));
-          setOtherUserLocations(formattd);
+          if (data) {
+            const formattd = data.map((locationData) => ({
+              id: locationData.id,
+              name: locationData.name,
+              longitude: locationData.longitude,
+              latitude: locationData.latitude
+            }));
+            setOtherUserLocations(formattd);
+          } else {
+            console.log('他のユーザーのデータがありません');
+          }
         }
       }
     }
@@ -31,3 +34,4 @@ const [otherUserLocations, setOtherUserLocations] = useAtom(otherUserLocationAto
   }, []);
   return otherUserLocations;
 };
+

@@ -1,6 +1,5 @@
 import { useAtomValue } from 'jotai'
-import React from 'react'
-import { latitudeAtom, longitudeAtom, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom'
+import { watchedLatitudeAtom, watchedLongitudeAtom } from './Atom'
 
 export const CurrentCoordinate = () => {
   const latitude = useAtomValue(watchedLatitudeAtom);
