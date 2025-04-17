@@ -8,7 +8,6 @@ import { useAtom, useAtomValue } from 'jotai';
 import { latitudeAtom, locationAtom, longitudeAtom, mergePostDataAtom, PostLocation, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 import { CenterMapButton } from './CenterMapButton';
 import { ToHomeButton } from './ToHomeButton';
-// import { AutoFlyTo } from './AutoFlyTo';
 import { CurrentCoordinate } from './CurrentCoordinate';
 
 import { useOtherUserLocations } from '../hooks/useOtherUserLocations';
@@ -17,6 +16,8 @@ import { useEffect, useState } from 'react';
 import { supabase, supabaseUrl } from '../../utils/supabase';
 import { data } from 'react-router';
 import { Posts } from './posts';
+import { ToastContainer } from 'react-toastify';
+import { AutoFollow } from './AutoFollow';
 
 const greenIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
   iconUrl: '/leaflet/pngwing.com.png', // iconとして表示する画像のURL
@@ -90,6 +91,17 @@ export const MapPage = () => {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <MapContainer
         center={
           watchedLatitude && watchedLongitude ? [watchedLatitude, watchedLongitude] : [35.681641, 139.766921]
@@ -105,9 +117,8 @@ export const MapPage = () => {
         />
         <CurrentCoordinate /> {/* 座標表示 */}
         <CenterMapButton /> {/* 現在地に移動ボタン */}
-        <ToHomeButton />
-        {/* <AutoFlyTo/> */}
-        {/* 追従 */}
+        <ToHomeButton /> {/* Homeに戻るボタン */}
+        <AutoFollow />  {/* 追従 */}
 
         {/* 投稿マーカー */}
         {mergePostData?.map((mergePost) => {
@@ -149,19 +160,19 @@ export const MapPage = () => {
 
         {/* 他のユーザー用マーカー */}
         {otherUserLocations?.filter((user) => user.latitude !== null && user.longitude !== null)
-        .map((otherUser) => {
-          return (
-            <Marker
-              key={`${otherUser.id}`}
-              position={
-                [otherUser.latitude, otherUser.longitude]
-              }
-            icon={otherIcon}
-            >
-              <Popup>{otherUser.name}</Popup>
-            </Marker>
-          )
-        })}
+          .map((otherUser) => {
+            return (
+              <Marker
+                key={`${otherUser.id}`}
+                position={
+                  [otherUser.latitude, otherUser.longitude]
+                }
+                icon={otherIcon}
+              >
+                <Popup>{otherUser.name}</Popup>
+              </Marker>
+            )
+          })}
 
         {/* ログインユーザー用マーカー */}
         <Marker
