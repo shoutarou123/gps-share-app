@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { GetUserDataId } from "../../lib/authUser";
 import { supabase } from "../../utils/supabase";
+
 import { useAtom } from "jotai";
 import { otherUserLocationAtom } from "../compornents/Atom";
 

@@ -18,7 +18,7 @@ export const ResetPasswordForm = () => {
       if (error) {
         throw new Error(error.message);
       }
-      alert('パスワード再設定メールを送信しました。メールを確認してください。');
+      toast.success('パスワード再設定メールを送信しました。メールを確認してください。');
     } catch (err) {
       console.log(err)
     } finally {
@@ -83,5 +83,4 @@ export const ResetPasswordForm = () => {
       </BackgroundImage>
     </>
   )
-  
 };

@@ -21,28 +21,28 @@ import { Posts } from "./compornents/posts";
 import { Welcome } from "./compornents/Welcome";
 import { ToastContainer } from "react-toastify";
 import { UserShow } from "./compornents/UserShow";
+import { loadingAtom } from "./compornents/Atom";
 
 
 const usersAtom = atom<User[]>([]); // user情報を管理するatom
-const loadingAtom = atom(false)
+const [loading, setLoading] = useAtom(loadingAtom);
 
 function App() {
   const [users, setUsers] = useAtom<User[]>(usersAtom);
-  // const [loading, setLoading] = useAtom(loadingAtom);
 
   useEffect(() => {
     const GetAllUser = async () => {
-      // setLoading(true);
+      setLoading(true);
       const usersData = await GetAllUsers();
       setUsers(usersData);
-      // setLoading(false);
+      setLoading(false);
     }
     GetAllUser();
   }, [])
 
   return (
     <>
-    <ToastContainer
+      <ToastContainer
         position="top-center"
         autoClose={3000}
         hideProgressBar={false}
@@ -53,38 +53,37 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-    {/* {loading ? (<div><p>Loading...</p></div>) : ( */}
+      {loading ? (<div><p>Loading...</p></div>) : (
 
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-          <Route path="signupform" element={<SignupForm/>}/>
+            <Route path="signupform" element={<SignupForm />} />
 
-          <Route path="login" element={<LoginForm />} />
+            <Route path="login" element={<LoginForm />} />
 
-          <Route path="logout" element={<SignOutButton />} />
+            <Route path="logout" element={<SignOutButton />} />
 
-          <Route path="resetPasswordForm" element={<ResetPasswordForm />}/>
+            <Route path="resetPasswordForm" element={<ResetPasswordForm />} />
 
-          <Route path="passwordReset" element={<PasswordReset />}/>
+            <Route path="passwordReset" element={<PasswordReset />} />
 
+            <Route path="userShow/:id" element={<UserShow />} />
 
-          <Route path="userShow/:id" element={<UserShow />} />
+            <Route path="team" element={<Team />} />
+            <Route path="/team/register" element={<TeamRegister />} />
 
-          <Route path="team" element={<Team />} />
-          <Route path="/team/register" element={<TeamRegister />} />
+            <Route path="/post/register" element={<PostRegister />} />
 
-          <Route path="/post/register" element={<PostRegister />} />
+            <Route path="posts" element={<Posts />} />
 
-          <Route path="posts" element={<Posts />} />
+            <Route path="mapPage" element={<MapPage />} />
 
-          <Route path="mapPage" element={<MapPage />} />
-
-          <Route path="welcome" element={<Welcome />} />
-        </Routes>
-      </BrowserRouter>
-    {/* )} */}
+            <Route path="welcome" element={<Welcome />} />
+          </Routes>
+        </BrowserRouter>
+      )}
     </>
   )
 }

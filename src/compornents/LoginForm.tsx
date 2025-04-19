@@ -1,9 +1,10 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router'
-import { supabase } from '../../utils/supabase';
 import { toast } from 'react-toastify';
 import { loginAtom } from './Atom';
 import { useAtom } from 'jotai';
+import { supabase } from '../../utils/supabase';
+
 import { BackgroundImage } from './BackgroundImage';
 
 type Inputs = {

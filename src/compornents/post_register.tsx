@@ -1,16 +1,15 @@
-import React, { ChangeEvent, ChangeEventHandler, useEffect, useRef, useState } from 'react'
-import { useHooks } from '../hooks/hooks'
+import React, { ChangeEventHandler, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
+
 import { useAtom } from 'jotai'
 import { postAtom, postContentAtom, postTitleAtom, previewImgAtom, previewMovieAtom, uploadImageAtom, uploadMovieAtom } from './Atom'
-import { Post } from '../domain/post'
 import { supabase } from '../../utils/supabase'
-import { useNavigate } from 'react-router'
-import { PosAnimation } from 'leaflet'
-import { toast } from 'react-toastify'
+
+import { Post } from '../domain/post'
 import { BackgroundImage } from './BackgroundImage'
 
 export const PostRegister = () => {
-  const { handleFiles, imageContainerRef } = useHooks();
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [newTitle, setNewTitle] = useAtom<string>(postTitleAtom);
   const [newContent, setNewContent] = useAtom<string | null>(postContentAtom);
@@ -20,9 +19,6 @@ export const PostRegister = () => {
   const [previeMovie, setPrevieMovie] = useAtom<string | null>(previewMovieAtom);
 
   const [post, setPost] = useAtom<Post[]>(postAtom);
-
-  const [lat, setLat] = useState<number | null>(null);
-  const [lon, setLon] = useState<number | null>(null);
 
   const navigate = useNavigate();
 
@@ -44,16 +40,6 @@ export const PostRegister = () => {
       setUploadImg(null);
     }
   }
-
-  // プレビュー表示関数
-  // const handleFileChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-  //   if (e.target.files && e.target.files[0]) {
-  //     const file: File = e.target.files[0]; // Fileｵﾌﾞｼﾞｪｸﾄが作成されている
-  //     if (!file) return;
-  //     const fileImage: string = window.URL.createObjectURL(file); // 一時的なURL作成 (blob: <画像のURL>)が作成されている
-  //     setNewImg(fileImage); // set関数に画像URLを渡す
-  //   }
-  // }
 
   const getLocation = (): Promise<GeolocationPosition> => {
     return new Promise((resolve, reject) => {
