@@ -1,7 +1,9 @@
-import { supabase } from '../../utils/supabase'
 import { useNavigate } from 'react-router'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { supabase } from '../../utils/supabase'
 import { BackgroundImage } from './BackgroundImage';
+
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'react-toastify';
 
 type Inputs = {
   password: string;
@@ -22,9 +24,9 @@ export const PasswordReset = () => {
         throw new Error(error.message);
       }
       navigate('/login') // 成功したらloginページへ
-      alert("パスワード変更が完了しました")
+      toast.success("パスワード変更が完了しました")
     } catch (err) {
-      alert("エラーが発生しました");
+      toast.error("エラーが発生しました");
     } finally {
       reset();
     }

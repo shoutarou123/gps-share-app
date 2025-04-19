@@ -30,7 +30,6 @@ export const watchedLongitudeAtom = atom<number | null>(null);
 // export const manualLatitudeAtom = atom<number | null>(null);
 // export const manualLongitudeAtom = atom<number | null>(null);
 
-
 // 優先順位付きatom 手動が優先 次に監視用watch
 // export const rankLatitudeAtom = atom<number | null>((get) => {
 // return get(manualLatitudeAtom) ?? get(watchedLatitudeAtom);
@@ -62,7 +61,6 @@ export type mergePostData = {
 export const mergePostDataAtom = atom<mergePostData[]>([]);
 
 // 他のユーザーのusers_locationの中身保管用atom
-
 export type otherUserLocationData = {
   id: string;
   name: string;
@@ -74,3 +72,6 @@ export const otherUserLocationAtom = atom<otherUserLocationData[]>([]);
 
 // ログイン trure/false管理用
 export const loginAtom = atom(false);
+
+// ページネーション最初の数字の管理用
+export const itemsOffsetAtom = atom<number>(0);

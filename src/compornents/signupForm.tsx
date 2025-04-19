@@ -1,12 +1,12 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { isRouteErrorResponse, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 import { supabase } from '../../utils/supabase';
-import { User } from '../domain/user';
 import { useAtom } from 'jotai';
 import { userRegisterAtom } from './Atom';
-import Toast from './Toast';
+
 import { BackgroundImage } from './BackgroundImage';
-import { toast } from 'react-toastify';
+
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 // ﾌｫｰﾑ専用の型
 type SignUpFormData = {
@@ -114,7 +114,6 @@ export const SignupForm = () => {
   const handleClick = () => {
     navigate("/login");
   };
-
 
   return (
     <BackgroundImage>

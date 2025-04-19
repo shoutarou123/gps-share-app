@@ -1,8 +1,7 @@
 import { useCallback } from "react";
-import { supabase } from "../../utils/supabase";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import Toast from "./Toast";
+import { supabase } from "../../utils/supabase";
 
 
 export const SignOutButton = () => {

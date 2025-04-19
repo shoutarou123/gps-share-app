@@ -5,8 +5,6 @@ import { loginAtom } from './Atom';
 import { GeolocationFetchButton } from './GeolocationFetchButton';
 import { SignOutButton } from './SignOutButton';
 import { BackgroundImage } from './BackgroundImage';
-import Toast from './Toast';
-
 
 export default function Home() {
   const navigate = useNavigate();
@@ -29,7 +27,15 @@ export default function Home() {
         py-8
         ">
 
-          <h1 className='text-4xl text-white font-bold pt-10 mb-20 text-center'>災害時部隊管理システム</h1>
+          <h1
+            className='
+              text-4xl text-white font-bold
+              pt-10 mb-20
+              text-center
+              '
+          >
+            災害時部隊管理システム
+          </h1>
           {login ? (
             <div
               className='flex flex-col space-y-10 w-70 m-auto'

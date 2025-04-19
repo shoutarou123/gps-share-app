@@ -1,18 +1,24 @@
-import { useAtom } from 'jotai';
-import { loadingAtom, postAtom } from './Atom';
-import { Post } from '../domain/post';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import ReactPaginate from 'react-paginate';
+import { useAtom } from 'jotai';
+import { itemsOffsetAtom, loadingAtom, postAtom } from './Atom';
 import { supabase, supabaseUrl } from '../../utils/supabase';
+
+import { Post } from '../domain/post';
 import { BackgroundImage } from './BackgroundImage';
-
-
 
 export const Posts = () => {
   const [post, setPost] = useAtom<Post[]>(postAtom);
   const [loading, setLoading] = useAtom(loadingAtom)
   const navigate = useNavigate();
 
+  const [itemsOffset, setItemsOffset] = useAtom<number>(itemsOffsetAtom); // ページごとの最初の番号管理
+
+  const itemsPerPage = 5; // 1ページ当たりの表示数
+  const endOffset = itemsOffset + itemsPerPage; // endOffsetページの最後の番号
+  const currentPosts = post.slice(itemsOffset, endOffset);
+  const pageCount = Math.ceil(post.length / itemsPerPage);
   const SUPABASE_STORAGE_URL = `${supabaseUrl}/storage/v1/object/public/post-images`;
 
   useEffect(() => {
@@ -46,6 +52,11 @@ export const Posts = () => {
   }, [setPost])
   console.log('post', post);
 
+  const handlePageClick = (e: { selected: number }) => {
+    const newOffset = e.selected * itemsPerPage % post.length;
+    setItemsOffset(newOffset);
+  }
+
   return (
     <div>
       {loading ? <p>Loading...</p> :
@@ -75,16 +86,27 @@ export const Posts = () => {
               >
                 投稿一覧
               </h1>
-
+              <ReactPaginate
+                className='text-sky-500 text-2xl flex flex-row justify-center gap-5 mb-2 cursor-pointer cursor-border'
+                pageCount={pageCount}
+                onPageChange={handlePageClick}
+                marginPagesDisplayed={2} //先頭と末尾に表示するページの数。今回は2としたので1,2…今いるページの前後…後ろから2番目, 1番目 のように表示されます。
+                pageRangeDisplayed={1} //上記の「今いるページの前後」の番号をいくつ表示させるかを決めます。
+                activeClassName='font-black text-white' //今いるページ番号のクラス名。今いるページの番号だけ太字にしたりできます
+                previousLabel='前へ' //前のページ番号に戻すリンクのテキスト
+                nextLabel='次へ' //次のページに進むボタンのテキスト
+                disabledClassName='disabled' //先頭 or 末尾に行ったときにそれ以上戻れ(進め)なくするためのクラス
+                breakLabel='...' // ページがたくさんあるときに表示しない番号に当たる部分をどう表示するか
+              />
               <div className='overflow-x-auto w-200'>
                 <table className='w-full'>
                   <tbody>
                     <tr className='border'>
-                      <th className='border bg-gray-50/20 text-white text-3xl'>タイトル</th>
-                      <th className='border bg-gray-50/20 text-white text-3xl'>内容</th>
-                      <th className='border bg-gray-50/20 text-white text-3xl'>画像</th>
+                      <th className='border bg-gray-50/20 text-white text-2xl p-1'>タイトル</th>
+                      <th className='border bg-gray-50/20 text-white text-2xl p-1'>内容</th>
+                      <th className='border bg-gray-50/20 text-white text-2xl p-1'>画像</th>
                     </tr>
-                    {post.map((post) => {
+                    {currentPosts.map((post) => {
                       console.log(post)
                       return (
                         <tr key={post.id}>
@@ -148,7 +170,7 @@ export const Posts = () => {
                 '
                 onClick={() => navigate('/')}
               >
-                homeへ
+                Homeへ
               </button>
             </div>
           </BackgroundImage>

@@ -1,7 +1,7 @@
-import { useAtomValue } from 'jotai';
 import React from 'react'
-import { watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 import { useMap } from 'react-leaflet';
+import { useAtomValue } from 'jotai';
+import { watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 
 export const CenterMapButton = (): React.JSX.Element => {
   const watchedLatitude = useAtomValue(watchedLatitudeAtom)
@@ -9,20 +9,8 @@ export const CenterMapButton = (): React.JSX.Element => {
   const map = useMap();
 
   const handleClickSetView = () => {
-    console.log('ボタンがクリックされました');
-
-      // 監視値ﾘｾｯﾄ
-      // setWatchedLatitude(null);
-      // setWatchedLongitude(null);
-
-    // navigator.geolocation.getCurrentPosition((location) => {
-    //   console.log('現在地に戻るのlocation値', location);
-    //   setManualLatitude(location.coords.latitude);
-    //   setManualLongitude(location.coords.longitude);
-
     if (watchedLatitude && watchedLongitude) {
-      map.setView([watchedLatitude, watchedLongitude]);
-      console.log('地図の中心を更新しました');
+      map.setView([watchedLatitude, watchedLongitude]); // 地図の中心を更新
     } else {
       console.log('wathed位置情報なし');
     }
@@ -33,12 +21,19 @@ export const CenterMapButton = (): React.JSX.Element => {
   return (
 
     <button
-      className='border bg-blue-500 hover:bg-blue-400 cursor-pointer border-blue-500 rounded text-white absolute z-[1000] p-2 right-4 mt-5 mr-10'
+      className='
+      text-white
+      border border-blue-500
+      bg-blue-500
+      hover:bg-blue-400
+      cursor-pointer
+      rounded
+      absolute z-[1000]
+      p-2 right-4 mt-5 mr-10'
       onClick={handleClickSetView}
     >
       現在地に移動
     </button>
   )
-
 }
 

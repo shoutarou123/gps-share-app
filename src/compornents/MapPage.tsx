@@ -1,23 +1,24 @@
+import { useEffect} from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { ToastContainer } from 'react-toastify';
+import { supabase, supabaseUrl } from '../../utils/supabase';
+
+import { useAtom, useAtomValue } from 'jotai';
+import { latitudeAtom, locationAtom, longitudeAtom, mergePostDataAtom, PostLocation, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
+
 import L from 'leaflet'; // Lはleafletｸﾞﾛｰﾊﾞﾙｵﾌﾞｼﾞｪｸﾄ
+import '../../node_modules/leaflet/dist/leaflet.css';
+
 import markerIcon from '../../node_modules/leaflet/dist/images/marker-icon.png'
 import markerShadow from '../../node_modules/leaflet/dist/images/marker-shadow.png'
 
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
-import '../../node_modules/leaflet/dist/leaflet.css'; // 追加
-import { useAtom, useAtomValue } from 'jotai';
-import { latitudeAtom, locationAtom, longitudeAtom, mergePostDataAtom, PostLocation, watchedLatitudeAtom, watchedLongitudeAtom } from './Atom';
 import { CenterMapButton } from './CenterMapButton';
 import { ToHomeButton } from './ToHomeButton';
 import { CurrentCoordinate } from './CurrentCoordinate';
+import { AutoFollow } from './AutoFollow';
 
 import { useOtherUserLocations } from '../hooks/useOtherUserLocations';
 import { useGeoWatcher } from './useGeoWatcher';
-import { useEffect, useState } from 'react';
-import { supabase, supabaseUrl } from '../../utils/supabase';
-import { data } from 'react-router';
-import { Posts } from './posts';
-import { ToastContainer } from 'react-toastify';
-import { AutoFollow } from './AutoFollow';
 
 const greenIcon = L.icon({ // .iconｶｽﾀﾑｱｲｺﾝ作成のｸﾗｽ
   iconUrl: '/leaflet/pngwing.com.png', // iconとして表示する画像のURL
@@ -51,8 +52,8 @@ export const MapPage = () => {
   const otherUserLocations = useOtherUserLocations()
   const latitude = useAtomValue(latitudeAtom);
   const longitude = useAtomValue(longitudeAtom);
-  const [watchedLatitude, setWatchedLatitude] = useAtom(watchedLatitudeAtom);
-  const [watchedLongitude, setWatchedLongitude] = useAtom(watchedLongitudeAtom);
+  const watchedLatitude = useAtomValue(watchedLatitudeAtom);
+  const watchedLongitude = useAtomValue(watchedLongitudeAtom);
   const [locationData, setlocationData] = useAtom(locationAtom);
   const [mergePostData, setMergePostData] = useAtom(mergePostDataAtom);
 
@@ -78,7 +79,6 @@ export const MapPage = () => {
               image_url: `${SUPABASE_STORAGE_URL}/${post?.image_url}`
             }
           });
-          console.log('postsIdMergeLocIdDataの値', postsIdMergeLocIdData);
           setMergePostData(postsIdMergeLocIdData);
         }
 
@@ -109,7 +109,7 @@ export const MapPage = () => {
         zoom={17}
         scrollWheelZoom={true} // scrollでzoom可
         zoomSnap={0.5} // zoomの段階調整
-        style={{ height: '100vh', width: '100vw' }} // 追加
+        style={{ height: '100vh', width: '100vw' }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
