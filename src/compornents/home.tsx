@@ -3,8 +3,9 @@ import { useAtomValue } from 'jotai';
 import { loginAtom } from './Atom';
 
 import { GeolocationFetchButton } from './GeolocationFetchButton';
-import { ToastContainer } from 'react-toastify';
 import { SignOutButton } from './SignOutButton';
+import { BackgroundImage } from './BackgroundImage';
+import Toast from './Toast';
 
 
 export default function Home() {
@@ -13,30 +14,9 @@ export default function Home() {
 
   return (
     <>
-      <div className="
-    bg-[url('/design/wa2.jpg')]
-    bg-cover
-    h-screen
-    flex
-    items-center
-    justify-center
-    "
-
-      >
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
-        {/* <div className=''> */}
+      <BackgroundImage>
         <div className="
-        h-150 w-120
+        w-120
         bg-gray-200/10
         backdrop-blur-lg
         rounded-md
@@ -57,7 +37,15 @@ export default function Home() {
               <GeolocationFetchButton />
 
               <button
-                className='py-5 bg-amber-500 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-2xl font-black border text-white text-2xl cursor-pointer'
+                className='
+                py-5
+                bg-amber-500 hover:bg-amber-600
+                focus:outline-none focus:ring-2 focus:ring-amber-500
+                rounded-2xl
+                font-black text-white text-2xl
+                border
+                cursor-pointer
+                '
                 onClick={() => navigate("/post/register")}
               >
                 投稿
@@ -66,7 +54,7 @@ export default function Home() {
               <button
                 className="
                 py-5
-                hover:bg-gray-500/80
+                bg-lime-600 hover:bg-lime-700
                 backdrop-blur-lg
                 focus:outline-none focus:ring-2 focus:ring-amber-500
                 rounded-2xl
@@ -119,7 +107,7 @@ export default function Home() {
             </div>
           )}
            </div>
-        </div>
+        </BackgroundImage>
       {/* </div> */}
     </>
   )

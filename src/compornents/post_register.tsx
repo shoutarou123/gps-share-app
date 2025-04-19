@@ -6,6 +6,8 @@ import { Post } from '../domain/post'
 import { supabase } from '../../utils/supabase'
 import { useNavigate } from 'react-router'
 import { PosAnimation } from 'leaflet'
+import { toast } from 'react-toastify'
+import { BackgroundImage } from './BackgroundImage'
 
 export const PostRegister = () => {
   const { handleFiles, imageContainerRef } = useHooks();
@@ -74,7 +76,7 @@ export const PostRegister = () => {
       if (authError) throw authError;
 
       if (!authData) {
-        alert('ログインが必要です');
+        toast.error('ログインが必要です');
         return;
       }
 
@@ -141,68 +143,127 @@ export const PostRegister = () => {
       setUploadImg(null);
       setUploadMovie(null);
 
-      alert('投稿に成功しました');
+      toast.success('投稿に成功しました');
 
     } catch (error) {
       console.error(error);
-      alert('投稿に失敗しました');
+      toast.error('投稿に失敗しました');
     }
   };
 
   return (
-    <div className='flex flex-col items-center space-y-4'>
-      <div className='text-3xl font-bold'>投稿登録ページ</div>
-      <form onSubmit={handleSubmit}>
-        <label className='text-xl'>タイトル</label>
-        <input
-          className='w-90 mt-2 mb-2 bg-gray-50 border border-gray-300 rounded-lg flex p-2.5'
-          type='text'
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
-        />
-        <label className='text-xl'>内容</label>
-        <textarea
-          className='w-90 mt-2 mb-2 bg-gray-50 border border-gray-300 rounded-lg flex'
-          value={newContent ?? ''}
-          onChange={(e) => setNewContent(e.target.value)}
-        />
-        <label className='text-xl'>画像</label>
-        <input
-          ref={fileInputRef}
-          className='w-90 mt-2 p-2 bg-gray-50 border border-gray-300 rounded-lg flex '
-          type='file'
-          accept='image/*'
-          onChange={handleFileChange}
-        />
-
-        {previewImg && (
-          <img
-            className='flex'
-            style={{ width: 200, height: 200 }}
-            src={previewImg}
-          />
-        )}
-        <div className='flex flex-col mt-5'>
-        <button
-          className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
-          type='submit'
+    <BackgroundImage>
+      <div className="
+            w-120
+            bg-gray-200/10
+            backdrop-blur-lg
+            rounded-md
+            border
+            border-gray-200/10
+            shadow-lg
+            flex flex-col
+            justify-center
+            px-10
+            py-8
+            "
+      >
+        <h1 className='
+          text-4xl text-white font-bold
+          pt-10 mb-20
+          text-center
+        '
         >
-          送信
+          投稿登録</h1>
+        <form className='space-y-3 flex flex-col' onSubmit={handleSubmit}>
+          <label className='text-white text-2xl'>タイトル</label>
+          <input
+            className='text-white text-xl block border border-gray-300 w-full mb-5 p-3 rounded-md'
+            type='text'
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+          />
+          <label className='text-white text-2xl'>内容</label>
+          <textarea
+            className='text-white text-xl w-90 mt-2 mb-2 border border-gray-300 rounded-lg flex'
+            value={newContent ?? ''}
+            onChange={(e) => setNewContent(e.target.value)}
+          />
+          <label className='text-white text-2xl'>画像</label>
+          <input
+            ref={fileInputRef}
+            className='text-white block border border-gray-300 w-full mb-5 p-3 rounded-md'
+            type='file'
+            accept='image/*'
+            onChange={handleFileChange}
+          />
+
+          {previewImg && (
+            <img
+              className='flex'
+              style={{ width: 200, height: 200 }}
+              src={previewImg}
+            />
+          )}
+          <div className='flex flex-col mt-5'>
+            <button
+              className='
+                py-5
+                bg-sky-700
+                mb-7
+                hover:bg-sky-800
+                backdrop-blur-lg
+                focus:outline-none focus:ring-2 focus:ring-sky    -500
+                rounded-2xl
+                font-black
+                border
+                border-sky-700
+                text-white text-2xl
+                cursor-pointer
+              '
+              type='submit'
+            >
+              送信
+            </button>
+          </div>
+        </form>
+        <button
+          className='
+            w-50
+            mx-auto
+            py-5
+            mb-7
+            bg-lime-600 hover:bg-lime-700
+            backdrop-blur-lg
+            focus:outline-none focus:ring-2 focus:ring-amber-500
+            rounded-2xl
+            font-black
+            border
+            text-white text-2xl
+            cursor-pointer
+          '
+          onClick={() => navigate("/posts")}
+        >
+          投稿一覧へ
+        </button>
+        <button
+          className='
+            w-50
+            py-5 mb-3
+            mx-auto
+            hover:bg-gray-500/80
+            backdrop-blur-lg
+            focus:outline-none focus:ring-2 focus:ring-amber-500
+            rounded-2xl
+            font-black
+            border
+            text-white text-2xl
+            cursor-pointer
+          '
+          onClick={() => navigate("/")}
+        >
+          Homeへ
         </button>
       </div>
-      </form>
-      <button
-        className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
-        onClick={() => navigate("/posts")}
-      >
-        投稿一覧へ
-      </button>
-      <button
-        className='bg-gray-50 border border-gray-300 rounded-lg p-2.5'
-        onClick={() => navigate("/")}
-      >
-        Homeへ
-      </button>
-    </div>
+    </BackgroundImage>
   )
 }

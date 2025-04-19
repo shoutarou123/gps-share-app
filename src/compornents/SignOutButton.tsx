@@ -1,6 +1,8 @@
 import { useCallback } from "react";
 import { supabase } from "../../utils/supabase";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import Toast from "./Toast";
 
 
 export const SignOutButton = () => {
@@ -12,7 +14,10 @@ export const SignOutButton = () => {
       if (error) {
         throw new Error(error.message); // ここでthrowしないと仮にｴﾗｰが発生していても処理が進行しnavigateが実行されｴﾗｰの発生を検知できなくなる
       }
-      navigate('/login');
+      toast.success('ログアウトしました');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1200);
     } catch (err) { // catchはtry内で発生した例外(throwされたもの)のみしかｷｬｯﾁできない
       console.log(err);
     }
@@ -21,7 +26,7 @@ export const SignOutButton = () => {
   return (
     <>
       <button
-      className="
+        className="
       py-5
       hover:bg-gray-500/80
       backdrop-blur-lg
